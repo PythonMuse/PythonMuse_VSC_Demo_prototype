@@ -17,7 +17,7 @@ the scripts' real output. Nothing in it can be edited or run.
 | `virtual-repo/meta.json`        | Repo name, branch, commit message, commands to run.        |
 | `tools/build.py`                | Runs the scripts and bundles everything for the page.      |
 | `public/`                       | The site. `repo-data.js` and `repo-assets/` are generated. |
-| `cloudflare.config.ts`          | Cloudflare config: the Worker name. No server code.        |
+| `.github/workflows/pages.yml`   | Publishes `public/` to GitHub Pages on each push to main.  |
 
 ## How the content is produced
 
@@ -56,29 +56,27 @@ at or under that if "no scrolling" matters; longer files still work and scroll.
 ## Preview locally
 
 ```bash
-npm run preview
+python3 -m http.server 8000 --directory public
 ```
 
 Then open http://localhost:8000. Opening `public/index.html` directly also works;
 no server is required.
 
-## Deploy to Cloudflare
+## Publish with GitHub Pages
 
-This follows the same setup as `spectacle-sandbox`: the `cf` command-line tool and
-a `cloudflare.config.ts` file. The difference is that this site is static files
-only, so there is no Vite build, no Worker code, no database and no secrets. The
-generated files are committed, so a deploy needs no Python either.
+The site is static files, so GitHub Pages serves it directly. There is nothing to
+install and no build step: the generated files in `public/` are committed.
 
-| Task | Command |
-|---|---|
-| Install the tools (once) | `npm install` |
-| Check you are signed in to Cloudflare | `npx cf auth whoami` (sign in with `npx cf auth login`) |
-| Check a deploy would work, without deploying | `npx cf deploy public --dry-run` |
-| Publish `public/` | `npm run deploy` |
+One-time setup: in the repository on GitHub, go to **Settings > Pages** and set
+**Source** to **GitHub Actions**.
 
-The Worker is named `code-demo` in `cloudflare.config.ts`, so on the PythonMuse
-account it is served at `https://code-demo.pythonmuse.workers.dev`. Change the
-name there to publish under a different address.
+After that, every push to `main` publishes `public/` (see
+`.github/workflows/pages.yml`). The run appears under the **Actions** tab, where it
+can also be started by hand. The site is served at
+`https://patricktoohey.github.io/code-demo/`.
+
+The repository can stay private (this needs a paid GitHub plan), but the published
+site is public: anyone with the address can open it.
 
 ## Links you can share
 

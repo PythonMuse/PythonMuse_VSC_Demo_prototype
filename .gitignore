@@ -1,9 +1,4 @@
-node_modules/
 __pycache__/
 *.pyc
 .venv/
 .DS_Store
-
-# Cloudflare local state and build output
-.cloudflare
-.wrangler
