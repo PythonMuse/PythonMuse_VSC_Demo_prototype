@@ -17,7 +17,7 @@ the scripts' real output. Nothing in it can be edited or run.
 | `virtual-repo/meta.json`        | Repo name, branch, commit message, commands to run.        |
 | `tools/build.py`                | Runs the scripts and bundles everything for the page.      |
 | `public/`                       | The site. `repo-data.js` and `repo-assets/` are generated. |
-| `wrangler.jsonc`                | Cloudflare config: serve `public/` as static assets.       |
+| `cloudflare.config.ts`          | Cloudflare config: the Worker name. No server code.        |
 
 ## How the content is produced
 
@@ -56,23 +56,29 @@ at or under that if "no scrolling" matters; longer files still work and scroll.
 ## Preview locally
 
 ```bash
-python3 -m http.server 8000 --directory public
+npm run preview
 ```
 
-Or open `public/index.html` directly; no server is required.
+Then open http://localhost:8000. Opening `public/index.html` directly also works;
+no server is required.
 
 ## Deploy to Cloudflare
 
-Generated files are committed, so a deploy needs no build step and no Python.
+This follows the same setup as `spectacle-sandbox`: the `cf` command-line tool and
+a `cloudflare.config.ts` file. The difference is that this site is static files
+only, so there is no Vite build, no Worker code, no database and no secrets. The
+generated files are committed, so a deploy needs no Python either.
 
-```bash
-npm install
-npx wrangler deploy
-```
+| Task | Command |
+|---|---|
+| Install the tools (once) | `npm install` |
+| Check you are signed in to Cloudflare | `npx cf auth whoami` (sign in with `npx cf auth login`) |
+| Check a deploy would work, without deploying | `npx cf deploy public --dry-run` |
+| Publish `public/` | `npm run deploy` |
 
-With Workers Builds (Git integration), leave the build command empty and set the
-deploy command to `npx wrangler deploy`. Change `name` in `wrangler.jsonc` to
-control the `*.workers.dev` subdomain, or add a custom domain in the dashboard.
+The Worker is named `code-demo` in `cloudflare.config.ts`, so on the PythonMuse
+account it is served at `https://code-demo.pythonmuse.workers.dev`. Change the
+name there to publish under a different address.
 
 ## Links you can share
 
