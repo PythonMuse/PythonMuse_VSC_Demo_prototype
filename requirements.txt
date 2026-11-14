@@ -1,0 +1,3 @@
+# Needed only to rebuild the demo content (python tools/build.py)
+pandas>=2.2
+seaborn>=0.13

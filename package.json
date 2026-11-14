@@ -1,0 +1,13 @@
+{
+  "name": "code-demo",
+  "private": true,
+  "description": "Read-only, editor-style walkthrough of a small repo with agent skills, pandas scripts and seaborn charts.",
+  "scripts": {
+    "build": "python3 tools/build.py",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}

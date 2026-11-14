@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Code Demo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230078d4'/%3E%3Cpath d='M6 5 3.5 8 6 11M10 5l2.5 3L10 11' fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>
+  // Pick the theme before first paint: saved choice, else the OS setting.
+  (function () {
+    var theme = null;
+    try { theme = localStorage.getItem('code-demo-theme'); } catch (e) {}
+    if (theme !== 'light' && theme !== 'dark') {
+      theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    document.documentElement.dataset.theme = theme;
+  })();
+</script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app" id="app">
+  <header class="titlebar" id="titlebar"></header>
+  <nav class="activitybar" id="activitybar" aria-label="Views"></nav>
+  <aside class="sidebar" id="sidebar">
+    <div class="side-head" id="side-head"></div>
+    <div class="side-body" id="side-body"></div>
+  </aside>
+  <main class="workbench">
+    <div class="tabbar">
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <div class="actions" id="actions"></div>
+    </div>
+    <div class="breadcrumbs" id="breadcrumbs"></div>
+    <div class="editor" id="editor" tabindex="0"></div>
+    <section class="panel" id="panel" aria-label="Terminal"></section>
+  </main>
+  <footer class="statusbar" id="statusbar"></footer>
+</div>
+<noscript>This demo needs JavaScript to draw the editor.</noscript>
+<script src="repo-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
