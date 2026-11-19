@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# Environment
+.env
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor lock/temp files
+~$*.pptx
+~$*.docx
+
+# Evidence run logs (per-run reproduction logs, not the canonical checked-in evidence)
+evidence/run-logs/*
+!evidence/run-logs/.gitkeep
+!evidence/run-logs/README.md
+
+# Note: raw-data/, outputs/, and evidence/*.md are intentionally NOT ignored.
+# They are the demo's checked-in, reproducible artifacts (synthetic data only) —
+# the whole point is that `python scripts/forensic_review.py` regenerates outputs/
+# and evidence/population-reconciliation.md identically from the tracked source.

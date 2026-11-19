@@ -1,0 +1,17 @@
+{
+  "id": "fraud-forensics",
+  "order": 2,
+  "tabLabel": "Fraud & Forensics",
+  "name": "fraud_and_forensics_review_training_repo",
+  "branch": "main",
+  "commitMessage": "",
+  "source": "https://github.com/PythonMuse/fraud_and_forensics_review_training_repo.git",
+  "pipeline": [
+    "python scripts/forensic_review.py"
+  ],
+  "generated": [
+    "outputs/exception-report.csv",
+    "outputs/summary.md",
+    "evidence/population-reconciliation.md"
+  ]
+}

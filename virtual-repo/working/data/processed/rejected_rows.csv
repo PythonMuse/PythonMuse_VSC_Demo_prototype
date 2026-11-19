@@ -1,3 +1,0 @@
-order_id,order_date,store,product,category,qty,unit_price,region,reason
-1014,2026-02-13,Harbor,Decaf Blend,Beans,2,17.00,Waterfront,duplicate order_id
-1019,2026-03-02,Uptown,Espresso Roast 2lb,Beans,12,34.00,North,duplicate order_id

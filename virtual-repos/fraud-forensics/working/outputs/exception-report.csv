@@ -1,0 +1,21 @@
+transaction_date,vendor_name,vendor_id,invoice_number,payment_amount,payment_date,approver,gl_account,purchase_order_number,tests_triggered
+2026-02-13,BrightPath Fulfillment Services,V-2201,INV-0001,2400.0,2026-02-13,M. Osei,7400,,new_vendor_in_period
+2026-02-27,BrightPath Fulfillment Services,V-2201,INV-0002,48500.0,2026-02-27,M. Osei,7400,,new_vendor_in_period
+2026-03-07,BrightPath Fulfillment Services,V-2201,INV-0003,31200.0,2026-03-07,M. Osei,7400,,new_vendor_in_period;weekend_or_holiday_payment
+2026-05-25,CoreStack Software Group,V-1700,INV-SUB-0526,3200.0,2026-05-25,T. Kim,7200,PO-80010,weekend_or_holiday_payment
+2026-06-10,Kinetic Crate Logistics,V-1004,INV-KCL-0610,18700.0,2026-06-10,R. Alvarez,6420,PO-90044,material_volume_increase
+2026-06-24,Kinetic Crate Logistics,V-1004,INV-KCL-0624,21300.0,2026-06-24,R. Alvarez,6420,PO-90051,material_volume_increase
+2026-03-20,Meridian Pack & Fulfillment LLC,V-2202,INV-5501,27800.0,2026-03-20,M. Osei,6420,,new_vendor_in_period;related_vendor_gl_inconsistency
+2026-05-06,NeuralNest Components,V-1003,INV-10482,4820.0,2026-05-06,M. Osei,5100,PO-40110,near_duplicate_invoice_number
+2026-05-08,NeuralNest Components,V-1003,INV10482,4820.0,2026-05-08,M. Osei,5100,PO-40110,near_duplicate_invoice_number
+2026-05-11,NeuralNest Components,V-1003,INV 10482,4820.0,2026-05-11,R. Alvarez,5100,PO-40110,near_duplicate_invoice_number
+2026-03-20,QuantumCoil Materials,V-1002,INV-55210,12430.0,2026-03-20,T. Kim,5100,PO-40088,exact_duplicate_invoice
+2026-03-27,QuantumCoil Materials,V-1002,INV-55210,12430.0,2026-03-27,J. Whitfield,5100,PO-40088,exact_duplicate_invoice
+2026-02-02,Quorum Digital Media,V-1550,INV-MKT-0126,15000.0,2026-02-02,J. Whitfield,7010,PO-71005,recurring_round_dollar_payment
+2026-03-02,Quorum Digital Media,V-1550,INV-MKT-0226,15000.0,2026-03-02,J. Whitfield,7010,PO-71005,recurring_round_dollar_payment
+2026-04-01,Quorum Digital Media,V-1550,INV-MKT-0326,15000.0,2026-04-01,J. Whitfield,7010,PO-71005,recurring_round_dollar_payment
+2026-02-05,SiliconSerpent Supply Co,V-1001,INV-88401,9875.0,2026-02-05,R. Alvarez,6410,PO-33210,near_approval_threshold
+2026-02-19,SiliconSerpent Supply Co,V-1001,INV-88455,9790.0,2026-02-19,T. Kim,6410,PO-33244,near_approval_threshold
+2026-03-12,SiliconSerpent Supply Co,V-1001,INV-88502,9910.0,2026-03-12,R. Alvarez,6410,PO-33290,near_approval_threshold
+2026-04-02,SiliconSerpent Supply Co,V-1001,INV-88560,9650.0,2026-04-02,J. Whitfield,6410,PO-33325,near_approval_threshold
+2026-04-24,SiliconSerpent Supply Co,V-1001,INV-88611,9805.0,2026-04-24,T. Kim,6410,PO-33350,near_approval_threshold

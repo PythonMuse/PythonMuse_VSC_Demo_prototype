@@ -1,0 +1,3 @@
+{
+  "block": "Blocked: 'data/trial_balance_2026.csv' is a read-only source trial balance (CLAUDE.md, Rule 9). Never modify files in data/ - write results to outputs/ instead."
+}

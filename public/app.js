@@ -1,28 +1,61 @@
-/* Read-only editor look-alike. All content comes from window.REPO_DATA
-   (written by tools/build.py). No framework, no build step. */
+/* Editor look-alike with a scripted chat pane. All content comes from
+   window.REPOS (written by tools/build.py): one entry per practice repo,
+   each shown as a tab at the top of the page. No framework, no build step. */
 (function () {
   'use strict';
 
-  const REPO = window.REPO_DATA;
+  const REPOS = (window.REPOS || (window.REPO_DATA ? [window.REPO_DATA] : [])).map((r, n) => ({ id: r.id || 'repo' + n, chat: [], terminal: [], ...r }));
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const files = new Map(REPO.files.map((f) => [f.path, f]));
-  const changes = REPO.files.filter((f) => f.status);
   const baseName = (p) => p.split('/').pop();
   const dirName = (p) => p.split('/').slice(0, -1).join('/');
   const STATUS_NAME = { M: 'Modified', U: 'Untracked', D: 'Deleted' };
+  const narrow = () => window.innerWidth <= 760;
 
-  /* ------------------------------------------------------------ state */
-  const state = {
-    view: 'explorer',            // 'explorer' | 'scm'
-    sideOpen: window.innerWidth > 760,
-    panelOpen: false,
-    collapsed: new Set(),        // folder paths the reader has closed
-    tabs: [],                    // { id, kind: 'file' | 'diff', path, preview, rich }
-    activeId: null,
-    diffMode: 'auto',            // 'auto' picks side by side only when both sides fit
-    line: null,
-  };
+  /* ------------------------------------------------------------ state
+     Every repo keeps its own state object (open tabs, working tree, chat),
+     so switching tabs at the top and back again picks up where you left off.
+     REPO / files / changes / state always point at the active repo. */
+  let REPO, files, changes, state;
+  const stateByRepo = new Map();
+  const ui = { sideOpen: !narrow(), panelOpen: false, chatOpen: !narrow(), suggestOpen: true };
+
+  function freshState(repo) {
+    const map = new Map();
+    for (const f of repo.files) {
+      const copy = { ...f };
+      if (!copy.status) copy.head = copy.working;   // unchanged: HEAD is the same as the working tree
+      map.set(copy.path, copy);
+    }
+    return {
+      view: 'explorer',            // 'explorer' | 'scm'
+      collapsed: new Set(),        // folder paths the reader has closed
+      tabs: [],                    // { id, kind: 'file' | 'diff', path, preview, rich }
+      activeId: null,
+      diffMode: 'auto',            // 'auto' picks side by side only when both sides fit
+      line: null,
+      files: map,
+      terminal: repo.terminal.slice(),
+      chat: [],                    // { role: 'user', text } | { role: 'ai', step, pending, fresh } | { role: 'ai', text, hint }
+      done: new Set(),             // chat step ids that have run
+      draft: '',
+      busy: false,
+    };
+  }
+
+  function recompute() {
+    changes = [...files.values()].filter((f) => f.status).sort((x, y) => x.path.localeCompare(y.path));
+  }
+
+  function loadRepo(id) {
+    if (REPO) state.draft = $('chat-text').value;
+    REPO = REPOS.find((r) => r.id === id) || REPOS[0];
+    if (!stateByRepo.has(REPO.id)) stateByRepo.set(REPO.id, freshState(REPO));
+    state = stateByRepo.get(REPO.id);
+    files = state.files;
+    recompute();
+    $('chat-text').value = state.draft;
+  }
 
   /* ------------------------------------------------------------ icons */
   const svg = (body, size, cls) =>
@@ -39,12 +72,18 @@
     theme: svg('<circle cx="8" cy="8" r="5.500"/><path d="M8 2.500a5.500 5.500 0 0 1 0 11z" fill="currentColor"/>', 16),
     check: svg('<path d="M3 8.500l3.200 3.200L13 5"/>', 16),
     terminal: svg('<path d="M3 4.500l4 3.500-4 3.500M8.500 12H13"/>', 16),
+    spark: svg('<path d="M8 1.800l1.300 3.600 3.600 1.300-3.600 1.300L8 11.600 6.700 8 3.100 6.700l3.600-1.300z"/><path d="M12.500 10.500l.6 1.600 1.600.6-1.600.6-.6 1.600-.6-1.600-1.600-.6 1.600-.6z"/>', 16),
+    send: svg('<path d="M2.500 8h9M8 3.500 12.500 8 8 12.500"/>', 16),
+    reset: svg('<path d="M3 8a5 5 0 1 0 1.500-3.600"/><path d="M3 2.500v3h3"/>', 16),
+    user: svg('<circle cx="8" cy="5.500" r="2.700"/><path d="M2.800 14c.7-2.800 2.800-4.200 5.200-4.200s4.500 1.400 5.200 4.200"/>', 16),
+    lock: svg('<rect x="3" y="7" width="10" height="7" rx="1.200"/><path d="M5.500 7V5a2.500 2.500 0 0 1 5 0v2"/>', 16),
     mark: svg('<path d="M6 5 3.500 8 6 11M10 5l2.500 3L10 11" stroke="#fff" stroke-width="1.600"/>', 16),
   };
   const FILE_ICON = {
     python: '<rect x="2.500" y="2" width="7.500" height="7.500" rx="2.200" fill="#4b8bbe"/><rect x="6" y="6.500" width="7.500" height="7.500" rx="2.200" fill="#f2c53d"/>',
     markdown: '<g stroke="var(--ic-md)"><rect x="1.500" y="3.500" width="13" height="9" rx="1.500"/><path d="M4 10V6.200l2 2.200 2-2.200V10M11.500 6v3.800M9.900 8.300l1.600 1.600 1.600-1.600"/></g>',
     csv: '<g stroke="var(--ic-csv)"><rect x="2" y="3" width="12" height="10" rx="1.200"/><path d="M2 6.400h12M2 9.700h12M6.200 3v10M10 3v10"/></g>',
+    sheet: '<g stroke="var(--ic-csv)"><rect x="2" y="2" width="12" height="12" rx="1.500"/><path d="M5 5.500l3 5M8 5.500l-3 5M10 6h2M10 8h2M10 10h2"/></g>',
     image: '<g stroke="var(--ic-img)"><rect x="2" y="3" width="12" height="10" rx="1.500"/><circle cx="5.600" cy="6.400" r="1.100"/><path d="M2.500 12l3.500-3.500 2.500 2.500 2-2 3 3"/></g>',
     ignore: '<g stroke="var(--ic-git)"><path d="M8 2.200l5.800 5.800L8 13.800 2.200 8z"/><circle cx="8" cy="8" r="1.200"/></g>',
     plaintext: '<g stroke="var(--ic-txt)"><path d="M3 4.500h10M3 7.500h10M3 10.500h10M3 13.500h6"/></g>',
@@ -52,7 +91,7 @@
   const fileIcon = (path) => svg(FILE_ICON[langOf(path)] || FILE_ICON.plaintext, 16);
 
   /* --------------------------------------------------------- languages */
-  const LANG_LABEL = { python: 'Python', markdown: 'Markdown', csv: 'CSV', image: 'Image', ignore: 'Ignore', plaintext: 'Plain Text' };
+  const LANG_LABEL = { python: 'Python', markdown: 'Markdown', csv: 'CSV', sheet: 'Excel Workbook', image: 'Image', ignore: 'Ignore', plaintext: 'Plain Text' };
   function langOf(path) {
     const name = baseName(path);
     const ext = name.includes('.') ? name.split('.').pop().toLowerCase() : '';
@@ -60,6 +99,7 @@
     if (ext === 'py') return 'python';
     if (ext === 'md') return 'markdown';
     if (ext === 'csv') return 'csv';
+    if (ext === 'xlsx' || ext === 'xls') return 'sheet';
     if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].includes(ext)) return 'image';
     return 'plaintext';
   }
@@ -297,10 +337,17 @@
     s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, href) => {
       if (/^https?:/.test(href)) return `<a href="${href}" target="_blank" rel="noopener">${label}</a>`;
       const target = resolvePath(path, href);
-      return files.has(target) ? `<a href="#file=${encodeURI(target)}" data-open="${esc(target)}">${label}</a>` : label;
+      return files.has(target) ? `<a href="${fileHash('file', target)}" data-open="${esc(target)}">${label}</a>` : label;
     });
     s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*([^*\s][^*]*)\*/g, '<em>$1</em>');
-    return s.replace(/\u0001(\d+)\u0001/g, (_, n) => `<code>${esc(codes[n])}</code>`);
+    // `path/to/file` in prose opens that file when it exists in the repo.
+    return s.replace(/\u0001(\d+)\u0001/g, (_, n) => {
+      const code = codes[n];
+      const f = files.get(code);
+      return f && f.working !== undefined
+        ? `<a class="code-link" href="${fileHash('file', code)}" data-open="${esc(code)}"><code>${esc(code)}</code></a>`
+        : `<code>${esc(code)}</code>`;
+    });
   }
 
   function renderMarkdown(text, path) {
@@ -376,7 +423,8 @@
   function openTab(kind, path, pin) {
     const file = files.get(path);
     if (!file) return;
-    if (kind === 'diff' && file.status !== 'M') kind = 'file';
+    if (kind === 'diff' && file.status !== 'M' && file.status !== 'D') kind = 'file';
+    if (kind === 'file' && file.status === 'D') kind = 'diff';
     const id = kind + ':' + path;
     let tab = state.tabs.find((t) => t.id === id);
     if (!tab) {
@@ -386,7 +434,7 @@
     } else if (pin) tab.preview = false;
     state.activeId = id;
     state.line = null;
-    if (window.innerWidth <= 760) state.sideOpen = false;
+    if (window.innerWidth <= 760) ui.sideOpen = false;
     render();
   }
 
@@ -403,20 +451,31 @@
   }
 
   /* --------------------------------------------------------------- render */
+  function renderRepoTabs() {
+    $('repotabs').innerHTML = '<span class="brand">PythonMuse · VS Code practice</span><div class="rtabs" role="tablist" aria-label="Practice repositories">' +
+      REPOS.map((r) => {
+        const st = stateByRepo.get(r.id);
+        const n = st ? st.done.size : 0;
+        return `<button class="rtab ${r.id === REPO.id ? 'active' : ''}" role="tab" aria-selected="${r.id === REPO.id}" data-repo="${esc(r.id)}" title="${esc(r.name)}">` +
+          `${esc(r.tabLabel || r.name)}${r.chat.length ? `<span class="rcount">${n}/${r.chat.length}</span>` : ''}</button>`;
+      }).join('') + '</div>';
+  }
+
   function renderTitlebar() {
     $('titlebar').innerHTML =
-      `<div class="title-left"><span class="mark">${ICON.mark}</span><span class="pill">Read-only demo</span></div>` +
+      `<div class="title-left"><span class="mark">${ICON.mark}</span><span class="pill">Practice copy</span></div>` +
       `<div class="command-center">${esc(REPO.name)}</div>` +
       '<div class="title-right">' +
-      `<button class="icon-btn ${state.sideOpen ? 'on' : ''}" data-act="side" title="Toggle sidebar (Ctrl+B)" aria-label="Toggle sidebar">${ICON.side}</button>` +
-      `<button class="icon-btn ${state.panelOpen ? 'on' : ''}" data-act="panel" title="Toggle terminal (Ctrl+\`)" aria-label="Toggle terminal">${ICON.panel}</button>` +
+      `<button class="icon-btn ${ui.chatOpen ? 'on' : ''}" data-act="chat" title="Toggle chat (Ctrl+Alt+I)" aria-label="Toggle chat">${ICON.spark}</button>` +
+      `<button class="icon-btn ${ui.sideOpen ? 'on' : ''}" data-act="side" title="Toggle sidebar (Ctrl+B)" aria-label="Toggle sidebar">${ICON.side}</button>` +
+      `<button class="icon-btn ${ui.panelOpen ? 'on' : ''}" data-act="panel" title="Toggle terminal (Ctrl+\`)" aria-label="Toggle terminal">${ICON.panel}</button>` +
       `<button class="icon-btn" data-act="theme" title="Switch light / dark theme" aria-label="Switch theme">${ICON.theme}</button>` +
       '</div>';
   }
 
   function renderActivity() {
     const btn = (view, label, icon, badge) =>
-      `<button class="act-btn ${state.view === view && state.sideOpen ? 'active' : ''}" data-view="${view}" title="${label}" aria-label="${label}">${icon}${badge || ''}</button>`;
+      `<button class="act-btn ${state.view === view && ui.sideOpen ? 'active' : ''}" data-view="${view}" title="${label}" aria-label="${label}">${icon}${badge || ''}</button>`;
     $('activitybar').innerHTML =
       btn('explorer', 'Explorer (Ctrl+Shift+E)', ICON.explorer) +
       btn('scm', `Source Control (Ctrl+Shift+G): ${changes.length} pending changes`, ICON.scm, changes.length ? `<span class="badge">${changes.length}</span>` : '');
@@ -424,7 +483,7 @@
 
   function treeHtml() {
     const root = { dirs: new Map(), files: [] };
-    for (const f of REPO.files) {
+    for (const f of files.values()) {
       const parts = f.path.split('/');
       let node = root;
       parts.slice(0, -1).forEach((part) => {
@@ -505,21 +564,30 @@
     const crumbs = $('breadcrumbs');
     if (!tab) {
       crumbs.innerHTML = '';
-      const start = [['README.md', 'Read the README'], [REPO.files.map((f) => f.path).find((p) => p.endsWith('SKILL.md')), 'Open a skill'], [changes[0] && changes[0].path, 'See what changed']]
+      const start = [['README.md', 'Read the README'], [[...files.keys()].find((p) => p.endsWith('SKILL.md')), 'Open a skill'], [changes[0] && changes[0].path, 'See what changed']]
         .filter(([p]) => p && files.has(p));
-      editor.innerHTML = `<div class="welcome"><div><h1>${esc(REPO.name)}</h1><p>A read-only copy of a small repository. Browse it the way you would in an editor.</p>` +
+      editor.innerHTML = `<div class="welcome"><div><h1>${esc(REPO.name)}</h1><p>A practice copy of this repository. Browse it the way you would in VS Code, and use the chat on the right to run the prepared prompts.</p>` +
         start.map(([p, label], n) => `<button data-${n === 2 ? 'change' : 'file'}="${esc(p)}">${fileIcon(p)}${label}: ${esc(baseName(p))}</button>`).join('') +
         '<div class="keys"><span>Explorer</span><span><kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>E</kbd></span><span>Source Control</span><span><kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>G</kbd></span>' +
-        '<span>Toggle sidebar</span><span><kbd>Ctrl</kbd> <kbd>B</kbd></span><span>Toggle terminal</span><span><kbd>Ctrl</kbd> <kbd>`</kbd></span></div></div></div>';
+        '<span>Toggle sidebar</span><span><kbd>Ctrl</kbd> <kbd>B</kbd></span><span>Toggle terminal</span><span><kbd>Ctrl</kbd> <kbd>`</kbd></span>' +
+        '<span>Toggle chat</span><span><kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>I</kbd></span></div></div></div>';
       return;
     }
     const f = files.get(tab.path);
     let meta = '';
     let html;
+    const fig = (cls, src, label, alt) => src === undefined
+      ? `<figure class="${cls} gone"><figcaption>${label}</figcaption><div class="gone-note">File deleted</div></figure>`
+      : `<figure class="${cls}"><figcaption>${label}</figcaption><img src="${esc(src)}" alt="${esc(baseName(f.path))} ${alt}"></figure>`;
+    const sheet = (data) => (window.renderSheet ? window.renderSheet(data, esc) : '<div class="gone-note">Spreadsheet preview unavailable.</div>');
     if (tab.kind === 'diff' && f.kind === 'image') {
-      html = '<div class="image-diff">' +
-        `<figure class="old"><figcaption><b>HEAD</b> last commit</figcaption><img src="${esc(f.head)}" alt="${esc(baseName(f.path))} at the last commit"></figure>` +
-        `<figure class="new"><figcaption><b>Working tree</b> after re-running the scripts</figcaption><img src="${esc(f.working)}" alt="${esc(baseName(f.path))} in the working tree"></figure></div>`;
+      html = '<div class="image-diff">' + fig('old', f.head, '<b>HEAD</b> last commit', 'at the last commit') +
+        fig('new', f.working, '<b>Working tree</b> after the AI’s changes', 'in the working tree') + '</div>';
+    } else if (f.kind === 'sheet') {
+      const gone = f.working === undefined;
+      const note = tab.kind === 'diff'
+        ? `<div class="sheet-note">${gone ? 'Deleted in the working tree. Showing the last committed version.' : 'Workbook changed. Showing the working-tree version.'}</div>` : '';
+      html = note + sheet(gone ? f.head : f.working);
     } else if (tab.kind === 'diff') {
       const d = renderDiff(f, diffIsInline(f));
       html = d.html;
@@ -543,7 +611,7 @@
   }
 
   function renderPanel() {
-    const lines = REPO.terminal.map((t) =>
+    const lines = state.terminal.map((t) =>
       `<span class="prompt">${esc(REPO.name)} $</span> <span class="cmd">${esc(t.command)}</span>\n${t.output ? esc(t.output) + '\n' : ''}`).join('\n');
     $('panel').innerHTML = `<div class="panel-head"><span class="ptab">Terminal</span><button class="icon-btn" data-act="panel" aria-label="Close terminal" title="Close terminal">${ICON.close}</button></div>` +
       `<pre class="terminal">${lines}\n<span class="prompt">${esc(REPO.name)} $</span> </pre>`;
@@ -554,7 +622,7 @@
     let right = '';
     if (tab) {
       const f = files.get(tab.path);
-      if (f.kind === 'text') {
+      if (f.kind === 'text' && f.working !== undefined) {
         const count = f.working.replace(/\n$/, '').split('\n').length;
         right += `<span class="item">${state.line && tab.kind === 'file' && !tab.rich ? 'Ln ' + state.line + ' of ' + count : count + ' lines'}</span><span class="item wide">UTF-8</span>`;
       }
@@ -567,10 +635,16 @@
       `<span class="right">${right}</span>`;
   }
 
+  function fileHash(kind, path) {
+    return '#repo=' + encodeURIComponent(REPO.id) + (path ? '&' + kind + '=' + encodeURI(path) : '');
+  }
+
   function render() {
     const app = $('app');
-    app.classList.toggle('side-closed', !state.sideOpen);
-    app.classList.toggle('panel-open', state.panelOpen);
+    app.classList.toggle('side-closed', !ui.sideOpen);
+    app.classList.toggle('panel-open', ui.panelOpen);
+    app.classList.toggle('chat-closed', !ui.chatOpen);
+    renderRepoTabs();
     renderTitlebar();
     renderActivity();
     renderSidebar();
@@ -578,21 +652,230 @@
     renderEditor();
     renderStatus();
     const tab = activeTab();
-    const hash = tab ? '#' + tab.kind + '=' + encodeURI(tab.path) : '#';
-    if (location.hash !== hash) history.replaceState(null, '', hash === '#' ? location.pathname + location.search : hash);
+    const hash = tab ? fileHash(tab.kind, tab.path) : fileHash();
+    if (location.hash !== hash) history.replaceState(null, '', hash);
     document.title = (tab ? baseName(tab.path) + ' - ' : '') + REPO.name;
+  }
+
+  /* ----------------------------------------------------------------- chat
+     Each step in REPO.chat is a prepared prompt + response. Running one adds
+     the reply to the conversation and applies its file changes to this repo's
+     working tree, so they show up in Explorer and Source Control. */
+  const stepById = (id) => REPO.chat.find((s) => s.id === id) || null;
+  const stepPaths = (step) => [...step.files.map((f) => f.path), ...(step.deletes || [])];
+  const FALLBACK = 'This practice copy only answers the **prepared prompts** for this repository, so everyone sees the same result. ' +
+    'Pick one under **Suggested prompts** below, or type something closer to one of them.';
+
+  function statusOf(f) {
+    if (f.head === undefined) return 'U';
+    if (f.working === undefined) return 'D';
+    const same = f.kind === 'sheet' ? JSON.stringify(f.head) === JSON.stringify(f.working) : f.head === f.working;
+    return same ? '' : 'M';
+  }
+
+  function applyStep(step, st) {
+    for (const nf of step.files) {
+      let f = st.files.get(nf.path);
+      if (!f) { f = { path: nf.path, kind: nf.kind }; st.files.set(nf.path, f); }
+      f.kind = nf.kind;
+      f.working = nf.kind === 'image' ? nf.url : nf.kind === 'sheet' ? nf.sheets : nf.content;
+      f.status = statusOf(f);
+    }
+    for (const path of step.deletes || []) {
+      const f = st.files.get(path);
+      if (!f) continue;
+      if (f.head === undefined) st.files.delete(path);
+      else { f.working = undefined; f.status = 'D'; }
+    }
+    st.tabs = st.tabs.filter((t) => st.files.has(t.path));
+    if (!st.tabs.some((t) => t.id === st.activeId)) st.activeId = st.tabs.length ? st.tabs[st.tabs.length - 1].id : null;
+    st.terminal.push(...(step.terminal || []));
+    st.done.add(step.id);
+  }
+
+  const STOP = new Set('the and for with this that these those are was were you your can could would should please what how why which into from about then them their there have has had will just its our out all any not but use using'.split(' '));
+  const wordsOf = (s) => new Set((s.toLowerCase().match(/[a-z0-9_./-]+/g) || []).filter((w) => w.length > 2 && !STOP.has(w)));
+
+  /** The prepared step closest to free-typed text, or null below `min`. */
+  function matchStep(text, min) {
+    const q = wordsOf(text);
+    if (!q.size) return null;
+    let best = null, score = 0;
+    for (const step of REPO.chat) {
+      const p = wordsOf(step.title + ' ' + step.prompt);
+      let hit = 0;
+      q.forEach((w) => { if (p.has(w)) hit++; });
+      const sc = (hit / q.size) * Math.min(1, hit / 2);
+      if (sc > score) { score = sc; best = step; }
+    }
+    return score >= min ? best : null;
+  }
+
+  function msgHtml(m, idx) {
+    const who = (icon, name) => `<div class="who">${icon}<span>${name}</span></div>`;
+    if (m.role === 'user') {
+      const long = m.text.length > 420;
+      return `<div class="msg user">${who(ICON.user, 'You')}<div class="bubble ${long && !m.expanded ? 'clamped' : ''}">${esc(m.text)}</div>` +
+        (long ? `<button class="more" data-expand="${idx}">${m.expanded ? 'Show less' : 'Show full prompt'}</button>` : '') + '</div>';
+    }
+    if (m.pending) {
+      return `<div class="msg ai">${who(ICON.spark, 'Copilot')}<div class="thinking"><span class="dots"><i></i><i></i><i></i></span>${esc(m.status || 'Working…')}</div></div>`;
+    }
+    const step = m.step ? stepById(m.step) : null;
+    let html = `<div class="msg ai">${who(ICON.spark, 'Copilot')}<div class="ai-body ${m.fresh ? 'fresh' : ''}">${renderMarkdown(step ? step.response : m.text, '')}`;
+    if (step && step.block) {
+      html += `<div class="block-card">${ICON.lock}<div><b>Blocked by a PreToolUse hook</b><pre>${esc(step.block)}</pre></div></div>`;
+    }
+    if (step && step.terminal && step.terminal.length) {
+      html += `<button class="term-chip" data-act="panel-open">${ICON.terminal}Ran ${step.terminal.length} command${step.terminal.length > 1 ? 's' : ''} in the terminal</button>`;
+    }
+    if (step && stepPaths(step).length) {
+      const rows = stepPaths(step).map((p) => {
+        const f = files.get(p);
+        const st = f ? f.status : '';
+        return `<button class="fc-row" data-change="${esc(p)}" title="${esc(p)}">${fileIcon(p)}<span class="name s-${st}">${esc(baseName(p))}</span>` +
+          `<span class="dir">${esc(dirName(p))}</span>${st ? `<span class="stat s-${st}">${st}</span>` : ''}</button>`;
+      }).join('');
+      const n = stepPaths(step).length;
+      html += `<div class="files-card"><div class="fc-head"><span>${n} file${n > 1 ? 's' : ''} changed</span><button class="text-btn" data-act="scm">Review in Source Control</button></div>${rows}</div>`;
+    }
+    if (m.hint && stepById(m.hint)) html += `<button class="sg-inline" data-fill="${esc(m.hint)}">Try: ${esc(stepById(m.hint).title)}</button>`;
+    return html + '</div></div>';
+  }
+
+  function renderChat() {
+    $('chat-head').innerHTML = `<span class="chat-title">${ICON.spark}Chat</span><span class="chat-mode">Agent</span><span class="chat-spacer"></span>` +
+      `<button class="icon-btn" data-act="reset" title="Reset this repository and its chat" aria-label="Reset this repository">${ICON.reset}</button>` +
+      `<button class="icon-btn" data-act="chat" title="Close chat (Ctrl+Alt+I)" aria-label="Close chat">${ICON.close}</button>`;
+
+    const body = $('chat-body');
+    const keepTop = body.scrollTop;   // a re-render (opening a file, expanding a block) must not jump the reader
+    body.innerHTML = state.chat.length ? state.chat.map(msgHtml).join('') :
+      `<div class="chat-empty">${ICON.spark}<h2>Practice prompts</h2>` +
+      '<p>Pick a prompt below, read it, then press <b>Send</b>. The replies are prepared in advance, so everyone gets the same result.</p>' +
+      '<p class="dim">When the AI changes files, they appear in Explorer and Source Control so you can review exactly what it did.</p></div>';
+    body.querySelectorAll('.ai-body.fresh > .md > *, .ai-body.fresh > :not(.md)').forEach((el, i) => { el.style.animationDelay = i * 70 + 'ms'; });
+    body.scrollTop = keepTop;
+    state.chat.forEach((m) => { m.fresh = false; });
+
+    const next = REPO.chat.find((s) => !state.done.has(s.id));
+    $('chat-suggest').innerHTML = !REPO.chat.length ? '' :
+      `<button class="sg-head" data-act="suggest" aria-expanded="${ui.suggestOpen}">${ui.suggestOpen ? ICON.down : ICON.right}Suggested prompts` +
+      `<span class="count">${state.done.size}/${REPO.chat.length}</span></button>` +
+      (ui.suggestOpen ? '<div class="sg-list">' + REPO.chat.map((s, n) =>
+        `<button class="sg ${state.done.has(s.id) ? 'done' : ''} ${next === s ? 'next' : ''} ${state.fillId === s.id ? 'picked' : ''}" data-fill="${esc(s.id)}" title="${esc(s.prompt.slice(0, 280))}">` +
+        `<span class="sg-n">${state.done.has(s.id) ? ICON.check : n + 1}</span><span class="sg-t">${esc(s.title)}</span></button>`).join('') + '</div>' : '');
+    $('chat-send').disabled = state.busy;
+  }
+
+  function scrollChat() {
+    const body = $('chat-body');
+    const last = body.querySelector('.msg.ai:last-child');
+    // a long reply opens at its first line; offsetTop is relative to #chat (not the scroller), so measure against the scroller's own box
+    if (last && last.offsetHeight > body.clientHeight) body.scrollTop += last.getBoundingClientRect().top - body.getBoundingClientRect().top - 8;
+    else body.scrollTop = body.scrollHeight;
+  }
+
+  function autosize() {
+    const t = $('chat-text');
+    t.style.height = 'auto';
+    t.style.height = Math.min(t.scrollHeight, 220) + 'px';
+  }
+
+  function fill(id) {
+    const step = stepById(id);
+    if (!step || state.busy) return;
+    ui.chatOpen = true;
+    state.fillId = id;
+    $('chat-text').value = step.prompt;
+    autosize();
+    render();
+    renderChat();
+    $('chat-text').focus();
+    $('chat-text').scrollTop = 0;
+  }
+
+  function send() {
+    const text = $('chat-text').value.trim();
+    if (!text || state.busy) return;
+    const picked = stepById(state.fillId);
+    const step = picked && picked.prompt.trim() === text ? picked : matchStep(text, 0.5);
+    const st = state;   // the reply lands in this repo even if the reader switches tabs meanwhile
+    st.fillId = null;
+    st.draft = '';
+    $('chat-text').value = '';
+    autosize();
+    st.chat.push({ role: 'user', text });
+    const msg = { role: 'ai', pending: true, status: 'Reading the workspace…' };
+    st.chat.push(msg);
+    st.busy = true;
+    renderChat();
+    scrollChat();
+    const later = step && (step.files.length || (step.deletes || []).length) ? 'Editing files…'
+      : step && step.terminal && step.terminal.length ? 'Running commands…' : 'Thinking…';
+    setTimeout(() => { msg.status = later; if (st === state) renderChat(); }, 700);
+    setTimeout(() => {
+      msg.pending = false;
+      msg.fresh = true;
+      st.busy = false;
+      if (step) {
+        msg.step = step.id;
+        applyStep(step, st);
+      } else {
+        msg.text = FALLBACK;
+        const near = matchStep(text, 0.12);
+        if (near) msg.hint = near.id;
+      }
+      if (st !== state) return;
+      recompute();
+      if (step && step.terminal && step.terminal.length) ui.panelOpen = true;
+      render();
+      renderPanel();
+      renderChat();
+      scrollChat();
+    }, step ? 1500 + Math.min(1200, step.response.length / 4) : 900);
+  }
+
+  function resetRepo() {
+    if (!window.confirm(`Reset “${REPO.tabLabel || REPO.name}”? This clears the chat and undoes every file change the AI made.`)) return;
+    const fresh = freshState(REPO);
+    stateByRepo.set(REPO.id, fresh);
+    state = fresh;
+    files = fresh.files;
+    recompute();
+    $('chat-text').value = '';
+    autosize();
+    renderPanel();
+    renderChat();
+    if (files.has('README.md')) openTab('file', 'README.md', true); else render();
+  }
+
+  function switchRepo(id) {
+    if (id === REPO.id) return;
+    loadRepo(id);
+    autosize();
+    renderPanel();
+    renderChat();
+    scrollChat();
+    if (!state.tabs.length && files.has('README.md')) openTab('file', 'README.md', true); else render();
   }
 
   /* --------------------------------------------------------------- events */
   function setView(view) {
-    if (state.view === view && state.sideOpen) state.sideOpen = false;
-    else { state.view = view; state.sideOpen = true; }
+    if (state.view === view && ui.sideOpen) ui.sideOpen = false;
+    else { state.view = view; ui.sideOpen = true; }
     render();
   }
 
   function act(name) {
-    if (name === 'side') state.sideOpen = !state.sideOpen;
-    if (name === 'panel') state.panelOpen = !state.panelOpen;
+    if (name === 'side') { ui.sideOpen = !ui.sideOpen; if (ui.sideOpen && narrow()) ui.chatOpen = false; }
+    if (name === 'panel') ui.panelOpen = !ui.panelOpen;
+    if (name === 'panel-open') ui.panelOpen = true;
+    if (name === 'chat') { ui.chatOpen = !ui.chatOpen; if (ui.chatOpen && narrow()) ui.sideOpen = false; }
+    if (name === 'scm') { state.view = 'scm'; ui.sideOpen = true; if (narrow()) ui.chatOpen = false; }
+    if (name === 'suggest') { ui.suggestOpen = !ui.suggestOpen; return renderChat(); }
+    if (name === 'send') return send();
+    if (name === 'reset') return resetRepo();
     if (name === 'theme') {
       const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
       document.documentElement.dataset.theme = next;
@@ -604,10 +887,13 @@
   function onClick(e, pin) {
     const hit = (attr) => { const el = e.target.closest(`[data-${attr}]`); return el ? el.dataset[attr] : null; };
     let v;
+    if ((v = hit('repo'))) return switchRepo(v);
+    if ((v = hit('fill'))) return fill(v);
+    if ((v = hit('expand'))) { const m = state.chat[Number(v)]; m.expanded = !m.expanded; return renderChat(); }
     if ((v = hit('close'))) return closeTab(v);
-    if ((v = hit('open'))) { e.preventDefault(); return openTab('file', v, true); }
+    if ((v = hit('open'))) { e.preventDefault(); if (narrow()) ui.chatOpen = false; return openTab('file', v, true); }
     if ((v = hit('file'))) return openTab('file', v, pin);
-    if ((v = hit('change'))) return openTab('diff', v, pin);
+    if ((v = hit('change'))) { if (narrow()) ui.chatOpen = false; return openTab('diff', v, pin); }
     if ((v = hit('dir'))) {
       state.collapsed.has(v) ? state.collapsed.delete(v) : state.collapsed.add(v);
       return renderSidebar();
@@ -648,19 +934,34 @@
   document.addEventListener('keydown', (e) => {
     const mod = e.ctrlKey || e.metaKey;
     const key = e.key.toLowerCase();
-    if (e.key === 'Enter' && e.target.matches && e.target.matches('[data-tab]')) e.target.click();
-    else if (mod && e.shiftKey && key === 'e') { e.preventDefault(); state.view = 'explorer'; state.sideOpen = true; render(); }
-    else if (mod && e.shiftKey && key === 'g') { e.preventDefault(); state.view = 'scm'; state.sideOpen = true; render(); }
-    else if (mod && !e.shiftKey && key === 'b') { e.preventDefault(); act('side'); }
+    if (e.target.id === 'chat-text' && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+    else if (e.key === 'Enter' && e.target.matches && e.target.matches('[data-tab]')) e.target.click();
+    else if (mod && e.altKey && key === 'i') { e.preventDefault(); act('chat'); if (ui.chatOpen) $('chat-text').focus(); }
+    else if (mod && e.shiftKey && key === 'e') { e.preventDefault(); state.view = 'explorer'; ui.sideOpen = true; render(); }
+    else if (mod && e.shiftKey && key === 'g') { e.preventDefault(); state.view = 'scm'; ui.sideOpen = true; render(); }
+    else if (mod && !e.shiftKey && !e.altKey && key === 'b') { e.preventDefault(); act('side'); }
     else if (mod && e.key === '`') { e.preventDefault(); act('panel'); }
   });
+  $('chat-text').addEventListener('input', () => {
+    autosize();
+    // Editing a picked prompt turns it into free text, matched by wording instead.
+    const picked = stepById(state.fillId);
+    if (picked && $('chat-text').value.trim() !== picked.prompt.trim()) { state.fillId = null; renderChat(); }
+  });
 
+  /** #repo=<id>&file=<path> or #repo=<id>&diff=<path>; the old #file=... form opens the first repo. */
   function openFromHash() {
-    const m = /^#(file|diff)=(.+)$/.exec(location.hash);
-    const path = m && decodeURI(m[2]);
+    const m = /^#(?:repo=([^&]*))?&?(?:(file|diff)=(.+))?$/.exec(location.hash);
+    if (!m || (!m[1] && !m[2])) return false;
+    if (m[1] && decodeURIComponent(m[1]) !== REPO.id && REPOS.some((r) => r.id === decodeURIComponent(m[1]))) {
+      loadRepo(decodeURIComponent(m[1]));
+      renderPanel();
+      renderChat();
+    }
+    const path = m[3] && decodeURI(m[3]);
     if (!path || !files.has(path)) return false;
-    if (m[1] === 'diff') state.view = 'scm';
-    openTab(m[1], path, true);
+    if (m[2] === 'diff') state.view = 'scm';
+    openTab(m[2], path, true);
     return true;
   }
   window.addEventListener('hashchange', openFromHash);
@@ -674,7 +975,13 @@
     }, 120);
   });
 
+  if (!REPOS.length) {
+    document.body.textContent = 'No repositories found. Run python tools/build.py to generate public/repo-data.js.';
+    return;
+  }
+  loadRepo(REPOS[0].id);
   renderPanel();
+  renderChat();
   if (!openFromHash()) {
     if (files.has('README.md')) openTab('file', 'README.md', true); else render();
   }

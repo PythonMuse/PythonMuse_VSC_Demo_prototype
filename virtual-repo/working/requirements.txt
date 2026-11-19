@@ -1,3 +1,0 @@
-# Everything the skill scripts import
-pandas>=2.2
-seaborn>=0.13

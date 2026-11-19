@@ -1,0 +1,12 @@
+{
+  "terminal": [
+    {
+      "command": "python scripts/forensic_review.py",
+      "output": "Analyzed 34 rows; flagged 20 for investigation.\nOutputs written to C:\\Users\\demo\\fraud_and_forensics_review_training_repo\\outputs"
+    },
+    {
+      "command": "git status --short",
+      "output": " M evidence/population-reconciliation.md\n M outputs/exception-report.csv\n M outputs/summary.md\n?? evidence/run-logs/2026-11-13-run-log.md"
+    }
+  ]
+}

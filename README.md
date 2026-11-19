@@ -1,86 +1,180 @@
-# code-demo
+# PythonMuse VS Code Demo (browser prototype)
 
-A read-only, editor-style walkthrough of a small repository, served as a static
-web page. It lets people explore a repo with agent skills, pandas scripts and
-seaborn charts without installing Git, Python, an editor or an AI assistant.
+A browser-only practice copy of VS Code with Copilot Chat, for training attendees
+who don't have VS Code. Attendees open a web page, browse a small project, and
+work through exercises in the chat panel. Nothing is installed, no API keys are
+needed, and it works offline once the page has loaded.
 
-The page has a file explorer, tabs, syntax highlighting, a Markdown preview, a
-CSV table view, a Source Control view with diffs, and a terminal panel showing
-the scripts' real output. Nothing in it can be edited or run.
+The chat is scripted. Attendees click or type prompts you prepared and get
+prepared replies. Some replies change files, and those changes show up in Source
+Control as diffs.
 
-## What is in here
+The page has one tab per PythonMuse repo:
 
-| Path                            | Purpose                                                    |
-|---------------------------------|------------------------------------------------------------|
-| `virtual-repo/working/`         | The repo people browse. Real, runnable files.              |
-| `virtual-repo/head-overrides/`  | Older versions of a few files: the "last commit".          |
-| `virtual-repo/meta.json`        | Repo name, branch, commit message, commands to run.        |
-| `tools/build.py`                | Runs the scripts and bundles everything for the page.      |
-| `public/`                       | The site. `repo-data.js` and `repo-assets/` are generated. |
-| `.github/workflows/pages.yml`   | Publishes `public/` to GitHub Pages on each push to main.  |
+| Tab | Repo |
+|---|---|
+| Accounting Workflow Starter | [pythonmuse-accounting-workflow-starter](https://github.com/PythonMuse/pythonmuse-accounting-workflow-starter) |
+| Fraud & Forensics | [fraud_and_forensics_review_training_repo](https://github.com/PythonMuse/fraud_and_forensics_review_training_repo) |
+| YoY Variance | [pythonmuse-YOY-variance-analysis](https://github.com/PythonMuse/pythonmuse-YOY-variance-analysis) |
 
-## How the content is produced
+## Using it
 
-The virtual repo (`store-sales`) holds two skills under `.github/skills/`, each
-with a `SKILL.md`, a `references/` folder and a `scripts/` folder. The scripts
-clean `data/raw/orders.csv` with pandas, write `data/processed/`, and draw three
-seaborn charts into `reports/`.
+- **Repo tabs.** Each tab has its own files, chat and changes. **Reset** on a tab
+  clears that repo's chat and undoes the chat's file changes (after a confirmation).
+- **Explorer and Source Control.** Explorer shows the files. Source Control lists
+  changed files; click one to see its diff.
+- **Chat.** Click a suggested prompt to send it, or type. Enter sends; Shift+Enter
+  starts a new line. Typed text is matched to the closest prepared prompt by its
+  wording. If nothing is close, the page gives a fallback reply saying it only
+  answers prepared prompts.
+- **Terminal.** A "Ran N commands" button opens the terminal with the commands and
+  their output.
+- **CSV.** Click **Show Table** on a `.csv` file; **Show Text** switches back.
+- **Excel.** `.xlsx` files open as a spreadsheet. Click a cell to see its formula.
 
-`tools/build.py` runs that pipeline twice: once on the working tree, and once on
-a temporary copy with `head-overrides/` applied. It compares the two results the
-way `git status` would, so every "M" and "U" in the Source Control view, every
-diff, and the terminal transcript come from real runs.
+Shortcuts: Ctrl+Shift+E (Explorer), Ctrl+Shift+G (Source Control), Ctrl+B
+(sidebar), Ctrl+` (terminal), Ctrl+Alt+I (chat).
 
-The story the changes tell: the point-of-sale system exported two orders twice,
-which inflated one store's March revenue. The working tree adds a de-duplication
-rule to the skill (reference and script), and the regenerated CSVs and charts
-show the effect.
+**Deep links** open a view directly: `#repo=<id>&file=<path>` opens a file, and
+adding `&diff=<path>` opens that changed file's diff. `<id>` is the repo's folder
+name under `virtual-repos/`.
 
-## Change the content
+## Folder layout
 
-1. Edit files under `virtual-repo/working/`. To make a file show up as modified,
-   put its previous version at the same path under `virtual-repo/head-overrides/`.
-   Files that exist only in `working/` show as untracked.
-2. Rebuild:
-
-   ```bash
-   pip install -r requirements.txt
-   python3 tools/build.py
-   ```
-
-3. Commit the result, including `public/repo-data.js` and `public/repo-assets/`.
-
-Code text is sized so a 33-line file fits on screen without scrolling. Keep files
-at or under that if "no scrolling" matters; longer files still work and scroll.
-
-## Preview locally
-
-```bash
-python3 -m http.server 8000 --directory public
+```
+virtual-repos/<id>/       one folder per tab
+  meta.json               repo settings (see below)
+  working/                the starting copy of the GitHub repo
+  chat/                   the scripted chat, one folder per step
+tools/
+  sync_repos.py           refreshes working/ from GitHub
+  build.py                builds the page's data
+public/                   the web page
+  index.html, app.js, styles.css, sheet.js
+  repo-data.js, repo-assets/   generated by build.py
+requirements.txt          Python packages for build.py
+.github/workflows/pages.yml  publishes public/ to GitHub Pages
 ```
 
-Then open http://localhost:8000. Opening `public/index.html` directly also works;
-no server is required.
+## Writing exercises (chat steps)
 
-## Publish with GitHub Pages
+Each step is one folder inside `chat/`:
 
-The site is static files, so GitHub Pages serves it directly. There is nothing to
-install and no build step: the generated files in `public/` are committed.
+```
+virtual-repos/yoy-variance/chat/04-edit-source-blocked/
+  prompt.md       the attendee's question (required)
+  response.md     the reply (required)
+  files/          optional: files the reply creates or changes
+  step.json       optional: deletes, terminal, block, fromPipeline
+```
 
-One-time setup: in the repository on GitHub, go to **Settings > Pages** and set
-**Source** to **GitHub Actions**.
+- **Order.** Steps run in folder-name order, so start names with a number
+  (`01-`, `02-`, ...).
+- **prompt.md.** Optional front matter sets the button title. Without it, the
+  first line of the prompt is used.
+- **response.md.** The reply shown in the chat.
+- **files/.** Each file's path inside `files/` is its path in the repo
+  (`files/outputs/memo.md` becomes `outputs/memo.md`). Each file must hold its
+  **complete** contents, not just the changed lines. It replaces the file at that
+  path, or is added if new, and shows in Source Control.
+- **step.json.** All keys are optional:
 
-After that, every push to `main` publishes `public/` (see
-`.github/workflows/pages.yml`). The run appears under the **Actions** tab, where it
-can also be started by hand. The site is served at
-`https://patricktoohey.github.io/code-demo/`.
+| Key | What it does |
+|---|---|
+| `deletes` | Paths to remove, e.g. `["old/notes.md"]` |
+| `terminal` | `{"command": ..., "output": ...}` entries shown in the terminal |
+| `block` | A message shown instead of making the change, for a refusal |
+| `fromPipeline` | `true` brings in the pipeline's files and output (see meta.json) |
 
-The repository can stay private (this needs a paid GitHub plan), but the published
-site is public: anyone with the address can open it.
+**Markdown.** `prompt.md` and `response.md` support headings, paragraphs,
+**bold**, *italic*, `code`, fenced code blocks, pipe tables, and flat lists. No
+nested lists, blockquotes or HTML.
 
-## Links you can share
+### Worked example
 
-The address updates as you browse, so any view can be linked:
+This is the blocked-edit step in YoY Variance. The attendee asks the chat to edit
+a source file, and the reply refuses.
 
-- `/#file=data/raw/orders.csv` opens a file
-- `/#diff=reports/monthly_trend.png` opens a change in the diff view
+`prompt.md`:
+
+```
+---
+title: Try to edit the source data
+---
+There's a typo in data/trial_balance_2026.csv. Change the March Marketing & Advertising amount to 12,000.
+```
+
+`response.md` (shortened):
+
+```
+The edit was refused. Files in data/ are read-only evidence (Rule 9 in CLAUDE.md).
+Confirm the amount in the source system, then re-pull the file.
+```
+
+`step.json`:
+
+```json
+{
+  "block": "Blocked: data/trial_balance_2026.csv is a read-only source. Write results to outputs/ instead."
+}
+```
+
+With a `block`, no files change, so this step has no `files/` folder.
+
+## meta.json fields
+
+| Field | Meaning |
+|---|---|
+| `id` | Must match the folder name; used in deep links |
+| `order` | Tab order, lowest first |
+| `tabLabel` | Text on the tab |
+| `name` | Repo name, shown in the terminal prompt and the Reset dialog |
+| `branch` | Branch shown in Source Control |
+| `commitMessage` | Message for the starting commit (blank in all three) |
+| `source` | GitHub URL that `sync_repos.py` clones |
+| `pipeline` | Commands `build.py` runs, in order, in the repo folder |
+| `generated` | Files and folders the pipeline produces |
+
+**pipeline and generated.** Some repos have a script that writes outputs such as
+reports or workbooks. Those paths go in `generated`, so `build.py` removes them
+from the starting state and attendees don't see them at first. The pipeline runs
+in a temporary copy, and its new or changed files are kept. A chat step with
+`"fromPipeline": true` brings them in, along with the command output. If a
+pipeline command fails, `build.py` stops with an error.
+
+## Updating from the source repos
+
+```
+python tools/sync_repos.py                # all three repos
+python tools/sync_repos.py yoy-variance   # one repo
+```
+
+This clones each `source` and replaces that repo's `working/` folder. It never
+touches `chat/` or `meta.json`, so any local edits inside `working/` are lost.
+Make those changes in the GitHub repo instead. Run `python tools/build.py`
+afterwards.
+
+## Build and preview
+
+```
+pip install -r requirements.txt   # once
+python tools/build.py             # after every change
+```
+
+To preview, open `public/index.html` in your browser, or run
+`python -m http.server -d public` and visit http://localhost:8000.
+
+## Publishing
+
+1. Commit and push to `main`. `.github/workflows/pages.yml` publishes `public/` to
+   GitHub Pages (watch it under the **Actions** tab).
+2. One-time setup: in the repo on GitHub, go to **Settings > Pages** and set
+   **Source** to **GitHub Actions**.
+
+`public/repo-data.js` and `public/repo-assets/` are generated on your machine, not
+on GitHub. Rebuild and commit them with every change, or the published site will
+be out of date.
+
+## Credits
+
+The editor engine is adapted from [patricktoohey/code-demo](https://github.com/patricktoohey/code-demo).

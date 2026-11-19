@@ -1,0 +1,9 @@
+{
+  "deletes": [],
+  "terminal": [
+    {
+      "command": "python scripts/prepaid_amortization_check.py",
+      "output": "Rows read: 8\nSchedule recorded total: 13,210.01\nGL control total:        13,210.01\nSchedule vs GL difference: 0.00\nstatus\nOK                               6\nREVIEW - variance                1\nREVIEW - no amortization term    1\nWrote outputs/amortization_check.csv"
+    }
+  ]
+}

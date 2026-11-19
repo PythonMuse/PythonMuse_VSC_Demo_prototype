@@ -1,0 +1,16 @@
+{
+  "id": "yoy-variance",
+  "order": 3,
+  "tabLabel": "YoY Variance",
+  "name": "pythonmuse-YOY-variance-analysis",
+  "branch": "main",
+  "commitMessage": "",
+  "source": "https://github.com/PythonMuse/pythonmuse-YOY-variance-analysis.git",
+  "pipeline": [
+    "python skills/trial-balance-comparison/scripts/generate_visuals.py"
+  ],
+  "generated": [
+    "outputs/visuals",
+    "outputs/excel/CodeCritters_TB_Comparison_Report.xlsx"
+  ]
+}

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>Code Demo</title>
+<title>PythonMuse VS Code Practice</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230078d4'/%3E%3Cpath d='M6 5 3.5 8 6 11M10 5l2.5 3L10 11' fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <script>
   // Pick the theme before first paint: light for everyone, unless this
@@ -19,6 +19,7 @@
 </head>
 <body>
 <div class="app" id="app">
+  <div class="repotabs" id="repotabs"></div>
   <header class="titlebar" id="titlebar"></header>
   <nav class="activitybar" id="activitybar" aria-label="Views"></nav>
   <aside class="sidebar" id="sidebar">
@@ -34,10 +35,21 @@
     <div class="editor" id="editor" tabindex="0"></div>
     <section class="panel" id="panel" aria-label="Terminal"></section>
   </main>
+  <aside class="chat" id="chat" aria-label="Chat">
+    <div class="chat-head" id="chat-head"></div>
+    <div class="chat-body" id="chat-body" aria-live="polite"></div>
+    <div class="chat-suggest" id="chat-suggest"></div>
+    <div class="chat-input">
+      <textarea id="chat-text" rows="2" placeholder="Pick a suggested prompt, or type your own" aria-label="Chat message"></textarea>
+      <div class="ci-bar"><span class="ci-hint">Enter to send · Shift+Enter for a new line</span>
+        <button class="send-btn" id="chat-send" data-act="send" aria-label="Send" title="Send (Enter)"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8h9M8 3.5 12.5 8 8 12.5"/></svg></button></div>
+    </div>
+  </aside>
   <footer class="statusbar" id="statusbar"></footer>
 </div>
 <noscript>This demo needs JavaScript to draw the editor.</noscript>
 <script src="repo-data.js"></script>
+<script src="sheet.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

@@ -1,0 +1,11 @@
+{
+  "id": "accounting-starter",
+  "order": 1,
+  "tabLabel": "Accounting Workflow Starter",
+  "name": "pythonmuse-accounting-workflow-starter",
+  "branch": "main",
+  "commitMessage": "",
+  "source": "https://github.com/PythonMuse/pythonmuse-accounting-workflow-starter.git",
+  "pipeline": [],
+  "generated": []
+}

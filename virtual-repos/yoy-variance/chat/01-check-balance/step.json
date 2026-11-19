@@ -1,0 +1,8 @@
+{
+  "terminal": [
+    {
+      "command": "python -c \"\nimport pandas as pd, glob\nfor f in sorted(glob.glob('data/trial_balance_*.csv')):\n    d = pd.read_csv(f); ni = 0\n    for m in ['Jan','Feb','Mar','Apr']:\n        s = lambda k: d.loc[d.Type == k, m].sum()\n        c = lambda a: d.loc[d.Account == a, m].sum()\n        ni += s('Revenue') - s('COGS') - s('Expense')\n        a = s('Asset') - 2 * c('Accumulated Depreciation')\n        l = s('Liability') + s('Equity') - 2 * c('Owner Draws') + ni\n        print(f[-8:-4], m, f'{a:,.0f}', f'{l:,.0f}', f'diff {a-l:,.0f}')\n\"",
+      "output": "2025 Jan 98,200 98,200 diff 0\n2025 Feb 101,770 101,770 diff 0\n2025 Mar 109,255 109,255 diff 0\n2025 Apr 117,430 117,430 diff 0\n2026 Jan 185,270 185,270 diff 0\n2026 Feb 189,225 189,225 diff 0\n2026 Mar 185,125 185,125 diff 0\n2026 Apr 193,385 193,385 diff 0"
+    }
+  ]
+}
