@@ -1,0 +1,28 @@
+order_id,order_date,store,product,category,qty,unit_price,region,revenue
+1001,2026-01-03,Downtown,House Blend 12oz,Beans,2,16.00,Central,32.00
+1002,2026-01-05,Uptown,Ceramic Mug,Merch,4,14.00,North,56.00
+1003,2026-01-08,Harbor,Pour-Over Kit,Gear,1,42.00,Waterfront,42.00
+1004,2026-01-10,Downtown,Burr Grinder,Gear,1,89.00,Central,89.00
+1005,2026-01-14,Uptown,Ethiopia Single Origin,Beans,3,21.50,North,64.50
+1006,2026-01-17,Harbor,House Blend 12oz,Beans,1,16.00,Waterfront,16.00
+1007,2026-01-21,Downtown,Tote Bag,Merch,2,18.00,Central,36.00
+1008,2026-01-24,Harbor,Travel Tumbler,Merch,2,26.00,Waterfront,52.00
+1009,2026-01-28,Uptown,French Press,Gear,1,36.00,North,36.00
+1010,2026-02-02,Downtown,Espresso Roast 2lb,Beans,3,34.00,Central,102.00
+1011,2026-02-04,Uptown,House Blend 12oz,Beans,5,16.00,North,80.00
+1012,2026-02-07,Harbor,Burr Grinder,Gear,1,89.00,Waterfront,89.00
+1013,2026-02-11,Downtown,Ceramic Mug,Merch,6,14.00,Central,84.00
+1014,2026-02-13,Harbor,Decaf Blend,Beans,2,17.00,Waterfront,34.00
+1015,2026-02-16,Uptown,Travel Tumbler,Merch,1,26.00,North,26.00
+1016,2026-02-19,Downtown,Pour-Over Kit,Gear,2,42.00,Central,84.00
+1017,2026-02-23,Harbor,Tote Bag,Merch,3,18.00,Waterfront,54.00
+1018,2026-02-26,Uptown,Paper Filters,Gear,4,8.50,North,34.00
+1019,2026-03-02,Uptown,Espresso Roast 2lb,Beans,12,34.00,North,408.00
+1020,2026-03-05,Downtown,Ethiopia Single Origin,Beans,4,21.50,Central,86.00
+1021,2026-03-07,Harbor,French Press,Gear,2,36.00,Waterfront,72.00
+1022,2026-03-11,Downtown,Travel Tumbler,Merch,3,26.00,Central,78.00
+1023,2026-03-14,Harbor,Ethiopia Single Origin,Beans,5,21.50,Waterfront,107.50
+1024,2026-03-18,Uptown,Ceramic Mug,Merch,5,14.00,North,70.00
+1025,2026-03-21,Downtown,Burr Grinder,Gear,2,89.00,Central,178.00
+1026,2026-03-25,Harbor,House Blend 12oz,Beans,6,16.00,Waterfront,96.00
+1027,2026-03-28,Uptown,Pour-Over Kit,Gear,1,42.00,North,42.00
