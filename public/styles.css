@@ -97,6 +97,7 @@ svg { display: block; flex: none; }
   height: 100dvh;
   grid-template:
     "tabs tabs tabs tabs" 36px
+    "note note note note" 30px
     "title title title title" 34px
     "act side main chat" minmax(0, 1fr)
     "status status status status" 22px
@@ -106,6 +107,23 @@ svg { display: block; flex: none; }
 .app.chat-closed { --chat-w: 0px; }
 .app.chat-closed .chat { display: none; }
 .repotabs { grid-area: tabs; }
+.notice {
+  grid-area: note; display: flex; align-items: center; gap: 10px; min-width: 0; padding: 0 12px;
+  font-size: 12px; white-space: nowrap; overflow: hidden;
+  background: color-mix(in srgb, var(--git-m) 14%, var(--bg-side)); border-bottom: 1px solid var(--border); color: var(--fg);
+}
+.notice .n-tag { flex: none; font-size: 10.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  padding: 1px 7px; border-radius: 9px; border: 1px solid var(--git-m); color: var(--git-m); }
+.notice .n-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--fg-dim); }
+.notice .n-real { flex: none; margin-left: auto; }
+.notice a { color: var(--accent); text-decoration: none; }
+.notice a:hover { text-decoration: underline; }
+.notice .n-copy { flex: none; display: flex; align-items: center; gap: 6px; padding: 2px 4px 2px 8px; border-radius: 4px;
+  border: 1px solid var(--border-strong); background: var(--bg-input); }
+.notice .n-copy code { font: 11.5px var(--mono); }
+.notice .n-copy .n-copied { font-size: 11px; color: var(--fg-dim); padding: 0 4px; border-left: 1px solid var(--border); }
+.notice .n-copy:hover { border-color: var(--accent); }
+@media (max-width: 1100px) { .notice .n-text { display: none; } }
 .chat { grid-area: chat; }
 .app.side-closed { --side-w: 0px; }
 .app.side-closed .sidebar { display: none; }
@@ -369,8 +387,10 @@ kbd { font: 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 1px 
 /* ---------- small screens: the sidebar floats over the editor ---------- */
 @media (max-width: 760px) {
   .app { grid-template-columns: 44px 0 minmax(0, 1fr) 0; }
-  .chat { position: fixed; z-index: 6; top: 70px; bottom: 22px; right: 0; width: min(440px, 100vw); box-shadow: var(--shadow); }
-  .sidebar { position: fixed; z-index: 5; top: 70px; bottom: 22px; left: 44px; width: min(290px, calc(100vw - 60px)); box-shadow: var(--shadow); }
+  .notice .n-copy { display: none; }
+  .notice .n-real { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .chat { position: fixed; z-index: 6; top: 100px; bottom: 22px; right: 0; width: min(440px, 100vw); box-shadow: var(--shadow); }
+  .sidebar { position: fixed; z-index: 5; top: 100px; bottom: 22px; left: 44px; width: min(290px, calc(100vw - 60px)); box-shadow: var(--shadow); }
   .command-center, .statusbar .wide { display: none; }
   .titlebar { grid-template-columns: 1fr auto; }
   .image-diff { grid-template-columns: 1fr; height: auto; }

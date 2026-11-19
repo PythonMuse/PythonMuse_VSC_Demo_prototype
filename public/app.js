@@ -461,6 +461,17 @@
       }).join('') + '</div>';
   }
 
+  /** Banner under the repo tabs: this is a mock-up, and here is the real repo. */
+  function renderNotice() {
+    const git = REPO.source || '';
+    const web = git.replace(/\.git$/, '');
+    const cmd = git ? 'git clone ' + git : '';
+    $('notice').innerHTML = `<span class="n-tag">Training mock-up</span>` +
+      '<span class="n-text">Simulated VS Code for practice. AI replies are prepared in advance and nothing you do here is saved.</span>' +
+      (web ? `<span class="n-real">Real repo on GitHub: <a href="${esc(web)}" target="_blank" rel="noopener" title="${esc(web)}">${esc(web.replace(/^https:\/\/github\.com\//, ''))}</a></span>` +
+        `<button class="n-copy" data-copy="${esc(cmd)}" title="${esc(cmd)}"><code>git clone</code><span class="n-copied">Copy</span></button>` : '');
+  }
+
   function renderTitlebar() {
     $('titlebar').innerHTML =
       `<div class="title-left"><span class="mark">${ICON.mark}</span><span class="pill">Practice copy</span></div>` +
@@ -645,6 +656,7 @@
     app.classList.toggle('panel-open', ui.panelOpen);
     app.classList.toggle('chat-closed', !ui.chatOpen);
     renderRepoTabs();
+    renderNotice();
     renderTitlebar();
     renderActivity();
     renderSidebar();
@@ -888,6 +900,12 @@
     const hit = (attr) => { const el = e.target.closest(`[data-${attr}]`); return el ? el.dataset[attr] : null; };
     let v;
     if ((v = hit('repo'))) return switchRepo(v);
+    if ((v = hit('copy'))) {
+      const label = e.target.closest('[data-copy]').querySelector('.n-copied');
+      const done = () => { label.textContent = 'Copied'; setTimeout(() => { label.textContent = 'Copy'; }, 1500); };
+      try { navigator.clipboard.writeText(v).then(done, () => { label.textContent = 'Select & copy'; }); } catch (err) { label.textContent = 'Select & copy'; }
+      return;
+    }
     if ((v = hit('fill'))) return fill(v);
     if ((v = hit('expand'))) { const m = state.chat[Number(v)]; m.expanded = !m.expanded; return renderChat(); }
     if ((v = hit('close'))) return closeTab(v);

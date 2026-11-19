@@ -257,7 +257,7 @@ def build_repo(repo_dir: Path) -> tuple[dict, str]:
         if pipeline[2] is not None:
             pipeline[2].cleanup()
     repo = {"id": repo_id, "tabLabel": meta["tabLabel"], "name": meta["name"],
-            "branch": meta["branch"], "commitMessage": meta.get("commitMessage", ""),
+            "branch": meta["branch"], "source": meta.get("source", ""), "commitMessage": meta.get("commitMessage", ""),
             "files": files, "terminal": [], "chat": chat}
     summary = (f"{repo_id}: {len(files)} files, {len(chat)} steps, "
                f"{len(meta.get('pipeline') or [])} pipeline commands")
