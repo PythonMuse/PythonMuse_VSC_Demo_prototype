@@ -417,6 +417,29 @@ kbd { font: 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 1px 
 }
 .rtab:hover { background: var(--hover); color: var(--fg); }
 .rtab.active { background: var(--bg); color: var(--fg-strong); border-top-color: var(--accent); }
+
+/* PythonMuse palette: one color per repo tab (navy, yellow, teal) */
+:root {
+  --pm-navy: #2a5c93; --pm-yellow: #f7c52b; --pm-teal: #1f8a8f;
+  --repo: var(--pm-navy); --repo-fg: #fff;
+}
+:root[data-tab="1"] { --repo: var(--pm-yellow); --repo-fg: #10222f; }
+:root[data-tab="2"] { --repo: var(--pm-teal); --repo-fg: #fff; }
+.rtab { --c: var(--pm-navy); --c-fg: #fff; font-weight: 600; border-top: 4px solid var(--c); background: color-mix(in srgb, var(--c) 16%, var(--bg-side)); }
+.rtab.c1 { --c: var(--pm-yellow); --c-fg: #10222f; }
+.rtab.c2 { --c: var(--pm-teal); }
+.rtab:hover { background: color-mix(in srgb, var(--c) 30%, var(--bg-side)); }
+.rtab.active, .rtab.active:hover { background: var(--c); color: var(--c-fg); border-top-color: var(--c); }
+.rtab.active .rcount { background: rgba(255,255,255,.22); color: var(--c-fg); }
+.rtab.c1.active .rcount { background: rgba(16,34,47,.15); }
+.repotabs { border-bottom: 3px solid var(--repo); }
+.repotabs .brand { gap: 8px; color: var(--fg-dim); font-weight: 600; }
+.repotabs .brand img { border-radius: 5px; display: block; }
+.notice .n-tag { background: var(--repo); color: var(--repo-fg); border-color: var(--repo); }
+.statusbar .remote { background: var(--repo); color: var(--repo-fg); }
+.title-left .mark { background: var(--repo); color: var(--repo-fg); }
+/* navy is lighter on the dark theme so it stays visible; darker on light */
+:root[data-theme="light"] { --pm-navy: #12385f; }
 .rcount {
   min-width: 28px; padding: 0 6px; border-radius: 9px; text-align: center;
   background: var(--selected); color: var(--fg); font-size: 11px; line-height: 16px;
@@ -610,3 +633,8 @@ table.sheet tbody tr:hover td:not(.sel) { background: var(--hover); }
 .sheet-tab { flex: none; height: 26px; padding: 0 14px; color: var(--fg-dim); border-right: 1px solid var(--border); border-bottom: 2px solid transparent; white-space: nowrap; }
 .sheet-tab:hover { background: var(--hover); color: var(--fg); }
 .sheet-tab.active { background: var(--bg); color: var(--fg-strong); border-bottom-color: var(--accent); }
+
+/* folder hint on tabs whose file name repeats (README.md) */
+.tab .where { font-size: 11px; color: var(--fg-faint); margin-left: 2px; white-space: nowrap; }
+.tab .where::before { content: " b7 a0"; }
+.tab.active .where { color: var(--fg-dim); }

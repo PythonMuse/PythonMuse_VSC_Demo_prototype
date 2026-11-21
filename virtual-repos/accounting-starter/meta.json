@@ -1,6 +1,6 @@
 {
   "id": "accounting-starter",
-  "order": 1,
+  "order": 2,
   "tabLabel": "Accounting Workflow Starter",
   "name": "pythonmuse-accounting-workflow-starter",
   "branch": "main",

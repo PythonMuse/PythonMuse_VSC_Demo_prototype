@@ -1,5 +1,5 @@
 ---
-title: 03 · Organize — Apply the agent instructions
+title: 03 · Organize — Apply and check the agent file
 ---
 Apply the approved agent instructions to `AGENTS.md`.
 

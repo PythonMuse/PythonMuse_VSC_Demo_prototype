@@ -1,0 +1,8 @@
+{
+  "terminal": [
+    {
+      "command": "python scripts/mask_options.py",
+      "output": "Masking option                                 Months out of balance  YoY flags  MoM flags\nAs received (no masking)                                   0 of 8         21          7\nHalve every amount, keep the $2,500 bar                    0 of 8         14          3\nHalve every amount and the bar ($1,250)                    0 of 8         21          7\nRound to the nearest $1,000                                6 of 8         21          8\nWrote data/processed/masked/trial_balance_2025_halved.csv and trial_balance_2026_halved.csv"
+    }
+  ]
+}

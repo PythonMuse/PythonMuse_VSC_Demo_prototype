@@ -1,0 +1,8 @@
+account_code,account,type,basis,from_month,to_month,from_value,to_value,dollar_change,pct_change,recurring_in_2025
+1200,Accounts Receivable,Asset,balance,Mar,Apr,16100.0,24800.0,8700.0,54.0,no
+4000,Sales - PyPal,Revenue,activity,Mar,Apr,17000.0,21000.0,4000.0,23.5,no
+5000,COGS - Materials,COGS,activity,Feb,Mar,9700.0,13500.0,3800.0,39.2,no
+6030,Marketing & Advertising,Expense,activity,Feb,Mar,1600.0,9800.0,8200.0,512.5,no
+6030,Marketing & Advertising,Expense,activity,Mar,Apr,9800.0,3200.0,-6600.0,-67.3,no
+6060,Professional Fees,Expense,activity,Jan,Feb,550.0,4200.0,3650.0,663.6,"yes (+3,300 in 2025)"
+6060,Professional Fees,Expense,activity,Feb,Mar,4200.0,500.0,-3700.0,-88.1,"yes (-3,350 in 2025)"

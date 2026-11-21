@@ -1,0 +1,257 @@
+year,account_code,account,type,basis,month,amount
+2025,1000,Checking,Asset,balance,Jan,7600.0
+2025,1000,Checking,Asset,balance,Feb,11270.0
+2025,1000,Checking,Asset,balance,Mar,18855.0
+2025,1000,Checking,Asset,balance,Apr,27430.0
+2025,1010,Savings,Asset,balance,Jan,20000.0
+2025,1010,Savings,Asset,balance,Feb,20000.0
+2025,1010,Savings,Asset,balance,Mar,20000.0
+2025,1010,Savings,Asset,balance,Apr,20000.0
+2025,1200,Accounts Receivable,Asset,balance,Jan,14000.0
+2025,1200,Accounts Receivable,Asset,balance,Feb,14500.0
+2025,1200,Accounts Receivable,Asset,balance,Mar,15000.0
+2025,1200,Accounts Receivable,Asset,balance,Apr,15200.0
+2025,1300,Inventory - Raw Materials,Asset,balance,Jan,8000.0
+2025,1300,Inventory - Raw Materials,Asset,balance,Feb,8200.0
+2025,1300,Inventory - Raw Materials,Asset,balance,Mar,8400.0
+2025,1300,Inventory - Raw Materials,Asset,balance,Apr,8600.0
+2025,1310,Inventory - Finished Goods,Asset,balance,Jan,11000.0
+2025,1310,Inventory - Finished Goods,Asset,balance,Feb,11200.0
+2025,1310,Inventory - Finished Goods,Asset,balance,Mar,11400.0
+2025,1310,Inventory - Finished Goods,Asset,balance,Apr,11600.0
+2025,1400,Prepaid Insurance,Asset,balance,Jan,2400.0
+2025,1400,Prepaid Insurance,Asset,balance,Feb,2200.0
+2025,1400,Prepaid Insurance,Asset,balance,Mar,2000.0
+2025,1400,Prepaid Insurance,Asset,balance,Apr,1800.0
+2025,1500,Equipment,Asset,balance,Jan,45000.0
+2025,1500,Equipment,Asset,balance,Feb,45000.0
+2025,1500,Equipment,Asset,balance,Mar,45000.0
+2025,1500,Equipment,Asset,balance,Apr,45000.0
+2025,1510,Accumulated Depreciation,Asset,balance,Jan,9800.0
+2025,1510,Accumulated Depreciation,Asset,balance,Feb,10600.0
+2025,1510,Accumulated Depreciation,Asset,balance,Mar,11400.0
+2025,1510,Accumulated Depreciation,Asset,balance,Apr,12200.0
+2025,2000,Accounts Payable,Liability,balance,Jan,7000.0
+2025,2000,Accounts Payable,Liability,balance,Feb,7200.0
+2025,2000,Accounts Payable,Liability,balance,Mar,7400.0
+2025,2000,Accounts Payable,Liability,balance,Apr,7600.0
+2025,2100,Credit Card Payable,Liability,balance,Jan,3200.0
+2025,2100,Credit Card Payable,Liability,balance,Feb,3300.0
+2025,2100,Credit Card Payable,Liability,balance,Mar,3100.0
+2025,2100,Credit Card Payable,Liability,balance,Apr,3400.0
+2025,2200,Sales Tax Payable,Liability,balance,Jan,1800.0
+2025,2200,Sales Tax Payable,Liability,balance,Feb,1850.0
+2025,2200,Sales Tax Payable,Liability,balance,Mar,1900.0
+2025,2200,Sales Tax Payable,Liability,balance,Apr,1950.0
+2025,2300,Payroll Liabilities,Liability,balance,Jan,2200.0
+2025,2300,Payroll Liabilities,Liability,balance,Feb,2200.0
+2025,2300,Payroll Liabilities,Liability,balance,Mar,2300.0
+2025,2300,Payroll Liabilities,Liability,balance,Apr,2300.0
+2025,2400,Loan Payable - Equipment,Liability,balance,Jan,18000.0
+2025,2400,Loan Payable - Equipment,Liability,balance,Feb,17600.0
+2025,2400,Loan Payable - Equipment,Liability,balance,Mar,17200.0
+2025,2400,Loan Payable - Equipment,Liability,balance,Apr,16800.0
+2025,3000,Common Stock,Equity,balance,Jan,10000.0
+2025,3000,Common Stock,Equity,balance,Feb,10000.0
+2025,3000,Common Stock,Equity,balance,Mar,10000.0
+2025,3000,Common Stock,Equity,balance,Apr,10000.0
+2025,3100,Retained Earnings,Equity,balance,Jan,50000.0
+2025,3100,Retained Earnings,Equity,balance,Feb,50000.0
+2025,3100,Retained Earnings,Equity,balance,Mar,50000.0
+2025,3100,Retained Earnings,Equity,balance,Apr,50000.0
+2025,3200,Owner Draws,Equity,balance,Jan,2000.0
+2025,3200,Owner Draws,Equity,balance,Feb,4000.0
+2025,3200,Owner Draws,Equity,balance,Mar,6000.0
+2025,3200,Owner Draws,Equity,balance,Apr,8000.0
+2025,4000,Sales - PyPal,Revenue,activity,Jan,15000.0
+2025,4000,Sales - PyPal,Revenue,activity,Feb,15500.0
+2025,4000,Sales - PyPal,Revenue,activity,Mar,16000.0
+2025,4000,Sales - PyPal,Revenue,activity,Apr,16200.0
+2025,4010,Sales - ByteBot,Revenue,activity,Jan,18000.0
+2025,4010,Sales - ByteBot,Revenue,activity,Feb,18500.0
+2025,4010,Sales - ByteBot,Revenue,activity,Mar,19000.0
+2025,4010,Sales - ByteBot,Revenue,activity,Apr,19200.0
+2025,4020,Sales - TensorTurtle,Revenue,activity,Jan,9000.0
+2025,4020,Sales - TensorTurtle,Revenue,activity,Feb,9200.0
+2025,4020,Sales - TensorTurtle,Revenue,activity,Mar,9500.0
+2025,4020,Sales - TensorTurtle,Revenue,activity,Apr,9700.0
+2025,4900,Shipping Income,Revenue,activity,Jan,1200.0
+2025,4900,Shipping Income,Revenue,activity,Feb,1250.0
+2025,4900,Shipping Income,Revenue,activity,Mar,1300.0
+2025,4900,Shipping Income,Revenue,activity,Apr,1320.0
+2025,5000,COGS - Materials,COGS,activity,Jan,9000.0
+2025,5000,COGS - Materials,COGS,activity,Feb,9200.0
+2025,5000,COGS - Materials,COGS,activity,Mar,9400.0
+2025,5000,COGS - Materials,COGS,activity,Apr,9600.0
+2025,5010,COGS - Labor,COGS,activity,Jan,6000.0
+2025,5010,COGS - Labor,COGS,activity,Feb,6100.0
+2025,5010,COGS - Labor,COGS,activity,Mar,6200.0
+2025,5010,COGS - Labor,COGS,activity,Apr,6300.0
+2025,6000,Rent Expense,Expense,activity,Jan,3500.0
+2025,6000,Rent Expense,Expense,activity,Feb,3500.0
+2025,6000,Rent Expense,Expense,activity,Mar,3500.0
+2025,6000,Rent Expense,Expense,activity,Apr,3500.0
+2025,6010,Utilities,Expense,activity,Jan,450.0
+2025,6010,Utilities,Expense,activity,Feb,480.0
+2025,6010,Utilities,Expense,activity,Mar,420.0
+2025,6010,Utilities,Expense,activity,Apr,400.0
+2025,6020,Payroll Expense,Expense,activity,Jan,12000.0
+2025,6020,Payroll Expense,Expense,activity,Feb,12000.0
+2025,6020,Payroll Expense,Expense,activity,Mar,12200.0
+2025,6020,Payroll Expense,Expense,activity,Apr,12200.0
+2025,6030,Marketing & Advertising,Expense,activity,Jan,1500.0
+2025,6030,Marketing & Advertising,Expense,activity,Feb,1500.0
+2025,6030,Marketing & Advertising,Expense,activity,Mar,1600.0
+2025,6030,Marketing & Advertising,Expense,activity,Apr,1600.0
+2025,6040,Software Subscriptions,Expense,activity,Jan,380.0
+2025,6040,Software Subscriptions,Expense,activity,Feb,380.0
+2025,6040,Software Subscriptions,Expense,activity,Mar,395.0
+2025,6040,Software Subscriptions,Expense,activity,Apr,395.0
+2025,6050,Insurance Expense,Expense,activity,Jan,600.0
+2025,6050,Insurance Expense,Expense,activity,Feb,600.0
+2025,6050,Insurance Expense,Expense,activity,Mar,600.0
+2025,6050,Insurance Expense,Expense,activity,Apr,600.0
+2025,6060,Professional Fees,Expense,activity,Jan,500.0
+2025,6060,Professional Fees,Expense,activity,Feb,3800.0
+2025,6060,Professional Fees,Expense,activity,Mar,450.0
+2025,6060,Professional Fees,Expense,activity,Apr,500.0
+2025,6070,Depreciation Expense,Expense,activity,Jan,800.0
+2025,6070,Depreciation Expense,Expense,activity,Feb,800.0
+2025,6070,Depreciation Expense,Expense,activity,Mar,800.0
+2025,6070,Depreciation Expense,Expense,activity,Apr,800.0
+2025,6080,Bank Fees & Merchant Charges,Expense,activity,Jan,320.0
+2025,6080,Bank Fees & Merchant Charges,Expense,activity,Feb,330.0
+2025,6080,Bank Fees & Merchant Charges,Expense,activity,Mar,340.0
+2025,6080,Bank Fees & Merchant Charges,Expense,activity,Apr,345.0
+2025,6090,Office Supplies,Expense,activity,Jan,150.0
+2025,6090,Office Supplies,Expense,activity,Feb,140.0
+2025,6090,Office Supplies,Expense,activity,Mar,160.0
+2025,6090,Office Supplies,Expense,activity,Apr,155.0
+2026,1000,Checking,Asset,balance,Jan,102290.0
+2026,1000,Checking,Asset,balance,Feb,106615.0
+2026,1000,Checking,Asset,balance,Mar,100785.0
+2026,1000,Checking,Asset,balance,Apr,100865.0
+2026,1010,Savings,Asset,balance,Jan,20000.0
+2026,1010,Savings,Asset,balance,Feb,20000.0
+2026,1010,Savings,Asset,balance,Mar,20000.0
+2026,1010,Savings,Asset,balance,Apr,20000.0
+2026,1200,Accounts Receivable,Asset,balance,Jan,15400.0
+2026,1200,Accounts Receivable,Asset,balance,Feb,15700.0
+2026,1200,Accounts Receivable,Asset,balance,Mar,16100.0
+2026,1200,Accounts Receivable,Asset,balance,Apr,24800.0
+2026,1300,Inventory - Raw Materials,Asset,balance,Jan,8700.0
+2026,1300,Inventory - Raw Materials,Asset,balance,Feb,8850.0
+2026,1300,Inventory - Raw Materials,Asset,balance,Mar,9200.0
+2026,1300,Inventory - Raw Materials,Asset,balance,Apr,9500.0
+2026,1310,Inventory - Finished Goods,Asset,balance,Jan,11700.0
+2026,1310,Inventory - Finished Goods,Asset,balance,Feb,11900.0
+2026,1310,Inventory - Finished Goods,Asset,balance,Mar,12100.0
+2026,1310,Inventory - Finished Goods,Asset,balance,Apr,12300.0
+2026,1400,Prepaid Insurance,Asset,balance,Jan,1600.0
+2026,1400,Prepaid Insurance,Asset,balance,Feb,1400.0
+2026,1400,Prepaid Insurance,Asset,balance,Mar,1200.0
+2026,1400,Prepaid Insurance,Asset,balance,Apr,1000.0
+2026,1500,Equipment,Asset,balance,Jan,45000.0
+2026,1500,Equipment,Asset,balance,Feb,45000.0
+2026,1500,Equipment,Asset,balance,Mar,46800.0
+2026,1500,Equipment,Asset,balance,Apr,46800.0
+2026,1510,Accumulated Depreciation,Asset,balance,Jan,19420.0
+2026,1510,Accumulated Depreciation,Asset,balance,Feb,20240.0
+2026,1510,Accumulated Depreciation,Asset,balance,Mar,21060.0
+2026,1510,Accumulated Depreciation,Asset,balance,Apr,21880.0
+2026,2000,Accounts Payable,Liability,balance,Jan,7700.0
+2026,2000,Accounts Payable,Liability,balance,Feb,7900.0
+2026,2000,Accounts Payable,Liability,balance,Mar,8100.0
+2026,2000,Accounts Payable,Liability,balance,Apr,8300.0
+2026,2100,Credit Card Payable,Liability,balance,Jan,3500.0
+2026,2100,Credit Card Payable,Liability,balance,Feb,3600.0
+2026,2100,Credit Card Payable,Liability,balance,Mar,3450.0
+2026,2100,Credit Card Payable,Liability,balance,Apr,4700.0
+2026,2200,Sales Tax Payable,Liability,balance,Jan,1980.0
+2026,2200,Sales Tax Payable,Liability,balance,Feb,2020.0
+2026,2200,Sales Tax Payable,Liability,balance,Mar,2060.0
+2026,2200,Sales Tax Payable,Liability,balance,Apr,2100.0
+2026,2300,Payroll Liabilities,Liability,balance,Jan,2350.0
+2026,2300,Payroll Liabilities,Liability,balance,Feb,2350.0
+2026,2300,Payroll Liabilities,Liability,balance,Mar,2400.0
+2026,2300,Payroll Liabilities,Liability,balance,Apr,2400.0
+2026,2400,Loan Payable - Equipment,Liability,balance,Jan,13200.0
+2026,2400,Loan Payable - Equipment,Liability,balance,Feb,12800.0
+2026,2400,Loan Payable - Equipment,Liability,balance,Mar,12400.0
+2026,2400,Loan Payable - Equipment,Liability,balance,Apr,12000.0
+2026,3000,Common Stock,Equity,balance,Jan,10000.0
+2026,3000,Common Stock,Equity,balance,Feb,10000.0
+2026,3000,Common Stock,Equity,balance,Mar,10000.0
+2026,3000,Common Stock,Equity,balance,Apr,10000.0
+2026,3100,Retained Earnings,Equity,balance,Jan,139580.0
+2026,3100,Retained Earnings,Equity,balance,Feb,139580.0
+2026,3100,Retained Earnings,Equity,balance,Mar,139580.0
+2026,3100,Retained Earnings,Equity,balance,Apr,139580.0
+2026,3200,Owner Draws,Equity,balance,Jan,2200.0
+2026,3200,Owner Draws,Equity,balance,Feb,4400.0
+2026,3200,Owner Draws,Equity,balance,Mar,6600.0
+2026,3200,Owner Draws,Equity,balance,Apr,8800.0
+2026,4000,Sales - PyPal,Revenue,activity,Jan,16000.0
+2026,4000,Sales - PyPal,Revenue,activity,Feb,16300.0
+2026,4000,Sales - PyPal,Revenue,activity,Mar,17000.0
+2026,4000,Sales - PyPal,Revenue,activity,Apr,21000.0
+2026,4010,Sales - ByteBot,Revenue,activity,Jan,19000.0
+2026,4010,Sales - ByteBot,Revenue,activity,Feb,19500.0
+2026,4010,Sales - ByteBot,Revenue,activity,Mar,19800.0
+2026,4010,Sales - ByteBot,Revenue,activity,Apr,20200.0
+2026,4020,Sales - TensorTurtle,Revenue,activity,Jan,9700.0
+2026,4020,Sales - TensorTurtle,Revenue,activity,Feb,9900.0
+2026,4020,Sales - TensorTurtle,Revenue,activity,Mar,10100.0
+2026,4020,Sales - TensorTurtle,Revenue,activity,Apr,10400.0
+2026,4900,Shipping Income,Revenue,activity,Jan,1320.0
+2026,4900,Shipping Income,Revenue,activity,Feb,1350.0
+2026,4900,Shipping Income,Revenue,activity,Mar,1400.0
+2026,4900,Shipping Income,Revenue,activity,Apr,1450.0
+2026,5000,COGS - Materials,COGS,activity,Jan,9500.0
+2026,5000,COGS - Materials,COGS,activity,Feb,9700.0
+2026,5000,COGS - Materials,COGS,activity,Mar,13500.0
+2026,5000,COGS - Materials,COGS,activity,Apr,14200.0
+2026,5010,COGS - Labor,COGS,activity,Jan,6300.0
+2026,5010,COGS - Labor,COGS,activity,Feb,6400.0
+2026,5010,COGS - Labor,COGS,activity,Mar,6500.0
+2026,5010,COGS - Labor,COGS,activity,Apr,6600.0
+2026,6000,Rent Expense,Expense,activity,Jan,3600.0
+2026,6000,Rent Expense,Expense,activity,Feb,3600.0
+2026,6000,Rent Expense,Expense,activity,Mar,3600.0
+2026,6000,Rent Expense,Expense,activity,Apr,3600.0
+2026,6010,Utilities,Expense,activity,Jan,460.0
+2026,6010,Utilities,Expense,activity,Feb,490.0
+2026,6010,Utilities,Expense,activity,Mar,430.0
+2026,6010,Utilities,Expense,activity,Apr,410.0
+2026,6020,Payroll Expense,Expense,activity,Jan,12500.0
+2026,6020,Payroll Expense,Expense,activity,Feb,12500.0
+2026,6020,Payroll Expense,Expense,activity,Mar,12500.0
+2026,6020,Payroll Expense,Expense,activity,Apr,12500.0
+2026,6030,Marketing & Advertising,Expense,activity,Jan,1600.0
+2026,6030,Marketing & Advertising,Expense,activity,Feb,1600.0
+2026,6030,Marketing & Advertising,Expense,activity,Mar,9800.0
+2026,6030,Marketing & Advertising,Expense,activity,Apr,3200.0
+2026,6040,Software Subscriptions,Expense,activity,Jan,400.0
+2026,6040,Software Subscriptions,Expense,activity,Feb,400.0
+2026,6040,Software Subscriptions,Expense,activity,Mar,410.0
+2026,6040,Software Subscriptions,Expense,activity,Apr,410.0
+2026,6050,Insurance Expense,Expense,activity,Jan,620.0
+2026,6050,Insurance Expense,Expense,activity,Feb,620.0
+2026,6050,Insurance Expense,Expense,activity,Mar,620.0
+2026,6050,Insurance Expense,Expense,activity,Apr,620.0
+2026,6060,Professional Fees,Expense,activity,Jan,550.0
+2026,6060,Professional Fees,Expense,activity,Feb,4200.0
+2026,6060,Professional Fees,Expense,activity,Mar,500.0
+2026,6060,Professional Fees,Expense,activity,Apr,550.0
+2026,6070,Depreciation Expense,Expense,activity,Jan,820.0
+2026,6070,Depreciation Expense,Expense,activity,Feb,820.0
+2026,6070,Depreciation Expense,Expense,activity,Mar,820.0
+2026,6070,Depreciation Expense,Expense,activity,Apr,820.0
+2026,6080,Bank Fees & Merchant Charges,Expense,activity,Jan,350.0
+2026,6080,Bank Fees & Merchant Charges,Expense,activity,Feb,355.0
+2026,6080,Bank Fees & Merchant Charges,Expense,activity,Mar,360.0
+2026,6080,Bank Fees & Merchant Charges,Expense,activity,Apr,600.0
+2026,6090,Office Supplies,Expense,activity,Jan,160.0
+2026,6090,Office Supplies,Expense,activity,Feb,150.0
+2026,6090,Office Supplies,Expense,activity,Mar,900.0
+2026,6090,Office Supplies,Expense,activity,Apr,170.0

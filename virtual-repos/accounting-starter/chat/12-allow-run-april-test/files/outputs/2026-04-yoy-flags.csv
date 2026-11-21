@@ -1,0 +1,8 @@
+account_code,account,type,basis,month,prior_2025,current_2026,dollar_change,pct_change
+1000,Checking,Asset,balance,Apr,27430.0,100865.0,73435.0,267.7
+1200,Accounts Receivable,Asset,balance,Apr,15200.0,24800.0,9600.0,63.2
+1510,Accumulated Depreciation,Asset,balance,Apr,12200.0,21880.0,9680.0,79.3
+2400,Loan Payable - Equipment,Liability,balance,Apr,16800.0,12000.0,-4800.0,-28.6
+3100,Retained Earnings,Equity,balance,Apr,50000.0,139580.0,89580.0,179.2
+4000,Sales - PyPal,Revenue,activity,Apr,16200.0,21000.0,4800.0,29.6
+5000,COGS - Materials,COGS,activity,Apr,9600.0,14200.0,4600.0,47.9

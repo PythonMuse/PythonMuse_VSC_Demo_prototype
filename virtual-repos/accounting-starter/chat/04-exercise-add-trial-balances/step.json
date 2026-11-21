@@ -1,0 +1,8 @@
+{
+  "terminal": [
+    {
+      "command": "python scripts/check_inputs.py",
+      "output": "data/raw/trial_balance_2025.csv: 32 data rows, 7 columns, headers OK\ndata/raw/trial_balance_2026.csv: 32 data rows, 7 columns, headers OK"
+    }
+  ]
+}

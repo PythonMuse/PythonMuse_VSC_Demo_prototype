@@ -1,0 +1,8 @@
+{
+  "terminal": [
+    {
+      "command": "python scripts/tb_compare.py --full",
+      "output": "trial_balance_2025.csv reconciles: every month, difference 0\ntrial_balance_2026.csv reconciles: every month, difference 0\nRows read: 32 + 32, account lists identical\nYoY flags (> $5,000 AND > 15%): 14 across 5 accounts\nMoM flags (> $5,000 AND > 20%): 3\nYoY by account:\n  1000 Checking                   4 flag(s): Jan, Feb, Mar, Apr\n  1200 Accounts Receivable        1 flag(s): Apr\n  1510 Accumulated Depreciation   4 flag(s): Jan, Feb, Mar, Apr\n  3100 Retained Earnings          4 flag(s): Jan, Feb, Mar, Apr\n  6030 Marketing & Advertising    1 flag(s): Mar\nMoM flags:\n  1200 Accounts Receivable        Mar->Apr    +8,700     54.0%  recurring: no\n  6030 Marketing & Advertising    Feb->Mar    +8,200    512.5%  recurring: no\n  6030 Marketing & Advertising    Mar->Apr    -6,600    -67.3%  recurring: no\nSaved: data/processed/tb_long.csv, outputs/yoy_flags.csv, outputs/mom_flags.csv, outputs/flag_summary.md, evidence/run_log.md"
+    }
+  ]
+}

@@ -13,8 +13,8 @@ The page has one tab per PythonMuse repo:
 
 | Tab | Repo |
 |---|---|
-| Accounting Workflow Starter | [pythonmuse-accounting-workflow-starter](https://github.com/PythonMuse/pythonmuse-accounting-workflow-starter) |
 | Fraud & Forensics | [fraud_and_forensics_review_training_repo](https://github.com/PythonMuse/fraud_and_forensics_review_training_repo) |
+| Accounting Workflow Starter | [pythonmuse-accounting-workflow-starter](https://github.com/PythonMuse/pythonmuse-accounting-workflow-starter) |
 | YoY Variance | [pythonmuse-YOY-variance-analysis](https://github.com/PythonMuse/pythonmuse-YOY-variance-analysis) |
 
 ## Using it

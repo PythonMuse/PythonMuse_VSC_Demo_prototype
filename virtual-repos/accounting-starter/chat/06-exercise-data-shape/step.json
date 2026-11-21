@@ -1,0 +1,8 @@
+{
+  "terminal": [
+    {
+      "command": "python scripts/join_shape_check.py",
+      "output": "Simulated 2026 export, first column, first 3 rows: ['1000 · Checking', '1010 · Savings', '1200 · Accounts Receivable']\n\n1. Join on the export's first column as-is\n   Matches: 0 of 32   (every account looks new or deleted)\n\n2. Split the code from the name, then join on code\n   Matches: 32 of 32\n\n3. Compare by row position when 2026 gains one account (6095 Software - AI tools, inserted mid-list)\n   Rows paired with the wrong prior-year account: 10 of 32   (silent, no error)\n   Joining on code instead: unmatched accounts to report as exceptions: ['6095']\n\n4. The guard the script needs\n   STOP: Account lists differ between the two files - cannot compare row-by-row."
+    }
+  ]
+}

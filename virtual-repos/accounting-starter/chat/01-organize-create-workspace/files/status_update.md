@@ -4,24 +4,36 @@
 
 ---
 
-## Session: 2026-11-19
+## Session: 2026-12-16
 
 ### Prompt / Task Requested
-Set up the workspace for a monthly prepaid-expense amortization review (CodeCritters Inc., fictional). No accounting data to be processed yet.
+Year-over-year and month-over-month comparison of CodeCritters Inc. trial balances, January to April 2026 against January to April 2025. Workflow name: `codecritters-tb-comparison`. Synthetic data.
 
 ### Plan
-1. Confirm the workspace folders and starter files exist.
-2. Explain the purpose of each folder and file.
-3. Draft and approve role-specific rules in `AGENTS.md` (prompts 02 and 03).
+1. [x] 01 Organize: confirm the workspace
+2. [ ] 02 Organize: draft AGENTS.md
+3. [ ] 03 Organize: apply and check AGENTS.md
+4. [ ] Add the two trial balances to data/raw/
+5. [ ] Exercise: masking options
+6. [ ] Exercise: data shape
+7. [ ] 04 Name: draft the assignment
+8. [ ] Exercise: thresholds in plan.md front matter
+9. [ ] 05 Brief: business context
+10. [ ] 06 Obtain: execution plan
+11. [ ] 07 Allow: design the smallest test
+12. [ ] 07 Allow: run the approved test
+13. [ ] 07 Allow: full run
+14. [ ] 08 Review: review package
+15. [ ] 09 Document: propose updates
+16. [ ] 09 Document: apply approved updates
+17. [ ] Exercise: controller raises the dollar bar to $5,000
 
 ### Execution Log
-- [09:05] Step 1 — DONE: Confirmed folders (`data/raw`, `data/processed`, `outputs`, `evidence`, `scripts`, `skills`, `docs`, `prompts`) and starter files (`AGENTS.md`, `plan.md`, `status_update.md`, `backlog.md`) already exist from the template. Nothing recreated.
-- [09:07] Step 2 — DONE: Explained folder and file purposes in chat. No data read or processed. No business rules added.
-- [09:08] Step 3 — PENDING: Draft `AGENTS.md` for the prepaid review.
+- Step 1 - DONE: Workspace `codecritters-tb-comparison` confirmed. Folders and four starter files already exist. No data processed.
+- Step 2 - PENDING
 
 ### Remaining / Next Steps
-Run prompt 02 to draft the agent instructions, review them, then run prompt 03 to apply them.
+Next: 02 Organize: draft AGENTS.md.
 
 ### Blockers / Notes
-- `AGENTS.md` still contains the generic template placeholder for the workflow description.
-- No source data has been added to `data/raw/`.
+None.

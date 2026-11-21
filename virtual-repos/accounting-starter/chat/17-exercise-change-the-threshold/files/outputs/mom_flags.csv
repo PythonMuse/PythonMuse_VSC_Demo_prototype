@@ -1,0 +1,4 @@
+account_code,account,type,basis,from_month,to_month,from_value,to_value,dollar_change,pct_change,recurring_in_2025
+1200,Accounts Receivable,Asset,balance,Mar,Apr,16100.0,24800.0,8700.0,54.0,no
+6030,Marketing & Advertising,Expense,activity,Feb,Mar,1600.0,9800.0,8200.0,512.5,no
+6030,Marketing & Advertising,Expense,activity,Mar,Apr,9800.0,3200.0,-6600.0,-67.3,no

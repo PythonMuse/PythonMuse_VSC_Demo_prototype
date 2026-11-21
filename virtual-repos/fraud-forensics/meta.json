@@ -1,6 +1,6 @@
 {
   "id": "fraud-forensics",
-  "order": 2,
+  "order": 1,
   "tabLabel": "Fraud & Forensics",
   "name": "fraud_and_forensics_review_training_repo",
   "branch": "main",

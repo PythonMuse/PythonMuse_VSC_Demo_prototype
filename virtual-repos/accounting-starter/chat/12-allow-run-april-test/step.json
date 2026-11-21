@@ -1,0 +1,8 @@
+{
+  "terminal": [
+    {
+      "command": "python scripts/tb_compare.py --month Apr",
+      "output": "trial_balance_2025.csv reconciles: every month, difference 0\ntrial_balance_2026.csv reconciles: every month, difference 0\nRows read: 32 + 32, account lists identical\nApr YoY flags (> $2,500 AND > 15%): 7\n  1000 Checking                      +73,435   267.7%\n  1200 Accounts Receivable            +9,600    63.2%\n  1510 Accumulated Depreciation       +9,680    79.3%\n  2400 Loan Payable - Equipment       -4,800   -28.6%\n  3100 Retained Earnings             +89,580   179.2%\n  4000 Sales - PyPal                  +4,800    29.6%\n  5000 COGS - Materials               +4,600    47.9%\nSaved: outputs/2026-04-yoy-flags.csv, evidence/reconciliation.md, evidence/run_log.md"
+    }
+  ]
+}

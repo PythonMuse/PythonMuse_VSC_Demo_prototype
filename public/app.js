@@ -452,11 +452,13 @@
 
   /* --------------------------------------------------------------- render */
   function renderRepoTabs() {
-    $('repotabs').innerHTML = '<span class="brand">PythonMuse · VS Code practice</span><div class="rtabs" role="tablist" aria-label="Practice repositories">' +
-      REPOS.map((r) => {
+    const idx = Math.max(0, REPOS.findIndex((r) => r.id === REPO.id));
+    document.documentElement.dataset.tab = String(idx % 3);
+    $('repotabs').innerHTML = '<span class="brand"><img src="logo.png" alt="" width="28" height="28">PythonMuse · VS Code practice</span><div class="rtabs" role="tablist" aria-label="Practice repositories">' +
+      REPOS.map((r, i) => {
         const st = stateByRepo.get(r.id);
         const n = st ? st.done.size : 0;
-        return `<button class="rtab ${r.id === REPO.id ? 'active' : ''}" role="tab" aria-selected="${r.id === REPO.id}" data-repo="${esc(r.id)}" title="${esc(r.name)}">` +
+        return `<button class="rtab c${i % 3} ${r.id === REPO.id ? 'active' : ''}" role="tab" aria-selected="${r.id === REPO.id}" data-repo="${esc(r.id)}" title="${esc(r.name)}">` +
           `${esc(r.tabLabel || r.name)}${r.chat.length ? `<span class="rcount">${n}/${r.chat.length}</span>` : ''}</button>`;
       }).join('') + '</div>';
   }
@@ -545,12 +547,21 @@
     $('side-body').innerHTML = state.view === 'scm' ? scmHtml() : treeHtml();
   }
 
+  /** True when another file in this repo has the same name (README.md, etc.), so tabs show the folder. */
+  function isDupName(path) {
+    const n = baseName(path);
+    let c = 0;
+    for (const k of files.keys()) if (baseName(k) === n && ++c > 1) return true;
+    return false;
+  }
+
   function renderTabs() {
     $('tabs').innerHTML = state.tabs.map((t) => {
       const f = files.get(t.path);
       const label = baseName(t.path) + (t.kind === 'diff' ? ' (Working Tree)' : '');
+      const where = isDupName(t.path) ? `<span class="where">${esc(dirName(t.path) || 'repo root')}</span>` : '';
       return `<div class="tab ${t.id === state.activeId ? 'active' : ''} ${t.preview ? 'preview' : ''}" data-tab="${esc(t.id)}" role="tab" tabindex="0" aria-selected="${t.id === state.activeId}" title="${esc(t.path)}">` +
-        `${fileIcon(t.path)}<span class="label s-${f.status}">${esc(label)}</span>` +
+        `${fileIcon(t.path)}<span class="label s-${f.status}">${esc(label)}</span>${where}` +
         (f.status ? `<span class="stat s-${f.status}">${f.status}</span>` : '') +
         `<button class="x" data-close="${esc(t.id)}" aria-label="Close ${esc(label)}">${ICON.close}</button></div>`;
     }).join('');

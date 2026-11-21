@@ -1,0 +1,15 @@
+account_code,account,type,basis,month,prior_2025,current_2026,dollar_change,pct_change
+1000,Checking,Asset,balance,Jan,7600.0,102290.0,94690.0,1245.9
+1000,Checking,Asset,balance,Feb,11270.0,106615.0,95345.0,846.0
+1000,Checking,Asset,balance,Mar,18855.0,100785.0,81930.0,434.5
+1000,Checking,Asset,balance,Apr,27430.0,100865.0,73435.0,267.7
+1200,Accounts Receivable,Asset,balance,Apr,15200.0,24800.0,9600.0,63.2
+1510,Accumulated Depreciation,Asset,balance,Jan,9800.0,19420.0,9620.0,98.2
+1510,Accumulated Depreciation,Asset,balance,Feb,10600.0,20240.0,9640.0,90.9
+1510,Accumulated Depreciation,Asset,balance,Mar,11400.0,21060.0,9660.0,84.7
+1510,Accumulated Depreciation,Asset,balance,Apr,12200.0,21880.0,9680.0,79.3
+3100,Retained Earnings,Equity,balance,Jan,50000.0,139580.0,89580.0,179.2
+3100,Retained Earnings,Equity,balance,Feb,50000.0,139580.0,89580.0,179.2
+3100,Retained Earnings,Equity,balance,Mar,50000.0,139580.0,89580.0,179.2
+3100,Retained Earnings,Equity,balance,Apr,50000.0,139580.0,89580.0,179.2
+6030,Marketing & Advertising,Expense,activity,Mar,1600.0,9800.0,8200.0,512.5

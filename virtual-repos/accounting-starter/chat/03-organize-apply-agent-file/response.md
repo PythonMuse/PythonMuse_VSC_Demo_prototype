@@ -1,22 +1,28 @@
-I read `AGENTS.md`, `backlog.md` and the draft you approved. I applied it to `AGENTS.md`, keeping the six-section structure, the safety rules, the prompt-injection section and the stop conditions. Then I reviewed the result.
+I saved the approved draft to `AGENTS.md`, then reviewed the saved file. I did not build any technical controls.
 
 ## Review findings
 
-| Area | Finding | Action |
-|---|---|---|
-| Ambiguous language | "Sensitive data" is not defined. | Added to `backlog.md` as an open question. |
-| Conflicting instructions | None found. | None. |
-| Missing stop conditions | No stop for a failed GL tie-out or a prepaid item with no term. | Added both to Section 5. |
-| Prompt injection | Free-text fields such as descriptions were not named as ingested content. | Added a line to Section 4. |
-| Compliance-only rules | Raw-file protection, masking, tie-out enforcement and injection scanning depend on AI behavior alone. | Listed as controls in `backlog.md`. |
+| Check | Finding |
+|---|---|
+| Ambiguous language | Section 3 says "sensitive" without defining it. I did not guess. It is logged as an open question in `backlog.md`. |
+| Conflicting instructions | None found. Section 2 lets AI save to `outputs/`. Section 3 forbids distributing without review. These do not conflict. |
+| Missing stop conditions | Two were missing and are now in Section 5: a trial balance that does not balance, and an unclear account type. |
+| Prompt injection | Section 4 covers it. It relies on the AI noticing. See controls below. |
+| Rules that rely only on AI compliance | Four, listed below. |
 
-The Section 6 canary is still the template placeholder. I did not invent a string for you.
+## Recommended controls (added to `backlog.md`, not built)
 
-I did not build any technical controls. No accounting data was read or processed.
+1. Block edits to `data/raw/`. Today "do not alter raw files" holds only if the AI remembers it and you notice.
+2. Keep the raw ledger out of the chat. The kit's hook scans text for SSN, EIN, card and bank-account patterns. It does not stop the AI from reading or editing `data/raw/`.
+3. Scan ingested files for instruction-like text.
+4. Make the balance check a script that exits, not an instruction.
+
+Controls 1 and 2 are the gap between written guidance and an enforced control. Until they exist, your "Allow" approval is the only thing standing between the AI and `data/raw/`.
+
+No financial data has been added or processed. The project structure exists, raw and processed data have separate folders, and `AGENTS.md` states the role, allowed actions, prohibited actions and stop conditions.
 
 **Changes**
 
-- `AGENTS.md` — filled in the role for the prepaid review, added the two stop conditions and the free-text-field line.
-- `backlog.md` — added six recommended controls and two open questions for your review.
-
-Please review the backlog items and tell me which ones to keep, change or drop.
+- `AGENTS.md` — role set, trial-balance rules added as Section 7, two stop conditions added.
+- `backlog.md` — four recommended controls and two open questions.
+- `status_update.md` — log updated.

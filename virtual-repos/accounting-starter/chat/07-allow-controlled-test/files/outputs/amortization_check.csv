@@ -1,9 +1,0 @@
-item_id,months_elapsed,monthly_amortization,recorded_ending_balance,expected_ending_balance,variance,status
-PP-001,4,600.0,4800.0,4800.0,0.0,OK
-PP-002,8,300.0,1200.0,1200.0,0.0,OK
-PP-003,6,200.0,1400.0,1200.0,200.0,REVIEW - variance
-PP-004,1,150.0,1650.0,1650.0,0.0,OK
-PP-005,10,100.0,200.0,200.0,0.0,OK
-PP-006,12,,3000.0,,,REVIEW - no amortization term
-PP-007,5,210.0,210.0,210.0,0.0,OK
-PP-008,3,83.33,750.01,750.01,0.0,OK

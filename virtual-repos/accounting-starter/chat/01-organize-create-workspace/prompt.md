@@ -1,7 +1,7 @@
 ---
 title: 01 · Organize — Create the workspace
 ---
-Create a new project workspace named `prepaid-amortization-review`.
+Create a new project workspace named `codecritters-tb-comparison`. The workflow is a year-over-year and month-over-month comparison of two trial balances.
 
 Create the recommended folders and the following starter files:
 
